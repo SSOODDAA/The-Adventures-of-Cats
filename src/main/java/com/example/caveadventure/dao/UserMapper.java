@@ -1,9 +1,11 @@
 package com.example.caveadventure.dao;
 
-/*用户模块的持久层接口*/
 
 import com.example.caveadventure.entity.UserEntity;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
+/*用户模块的持久层接口*/
 public interface UserMapper {
     /**
      * 插入用户的数据

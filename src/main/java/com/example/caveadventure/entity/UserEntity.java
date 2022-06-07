@@ -10,8 +10,17 @@ import java.util.Objects;
  */
 @Component
 public class UserEntity implements Serializable {
+    private Integer userid;
     private String username;
     private String pwd;
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
 
     public String getUsername() {
         return username;
@@ -33,19 +42,20 @@ public class UserEntity implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserEntity that = (UserEntity) o;
-        return username.equals(that.username) && pwd.equals(that.pwd);
+        UserEntity user = (UserEntity) o;
+        return Objects.equals(userid, user.userid) && Objects.equals(username, user.username) && Objects.equals(pwd, user.pwd);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, pwd);
+        return Objects.hash(userid, username, pwd);
     }
 
     @Override
     public String toString() {
         return "UserEntity{" +
-                "username='" + username + '\'' +
+                "userid=" + userid +
+                ", username='" + username + '\'' +
                 ", pwd='" + pwd + '\'' +
                 '}';
     }
