@@ -7,8 +7,8 @@
 
     <!--id属性：表示映射的接口中方法的名称，直接在标签的内容来编写SQL语句-->
     <insert id="insert" useGeneratedKeys="true" keyProperty="userid">
-        INSERT INTO base_info(username,pwd)VALUES(
-        #{username},#{pwd})
+        INSERT INTO base_info(username,pwd,best)VALUES(
+        #{username},#{pwd},#{best})
     </insert>
 
     <!--

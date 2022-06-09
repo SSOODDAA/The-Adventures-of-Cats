@@ -25,8 +25,9 @@ public class UserMapperTests {
     public void insert()
     {
         UserEntity user=new UserEntity();
-        user.setUsername("Tom");
+        user.setUsername("Lucy");
         user.setPwd("123");
+        user.setBest(0);
         Integer rows=userMapper.insert(user);
         System.out.println(rows);
     }
