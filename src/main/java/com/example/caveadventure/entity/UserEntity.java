@@ -13,6 +13,7 @@ public class UserEntity implements Serializable {
     private Integer userid;
     private String username;
     private String pwd;
+    private Integer best;
 
     public Integer getUserid() {
         return userid;
@@ -38,17 +39,25 @@ public class UserEntity implements Serializable {
         this.pwd = pwd;
     }
 
+    public Integer getBest() {
+        return best;
+    }
+
+    public void setBest(Integer best) {
+        this.best = best;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity user = (UserEntity) o;
-        return Objects.equals(userid, user.userid) && Objects.equals(username, user.username) && Objects.equals(pwd, user.pwd);
+        return Objects.equals(userid, user.userid) && Objects.equals(username, user.username) && Objects.equals(pwd, user.pwd) && Objects.equals(best, user.best);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userid, username, pwd);
+        return Objects.hash(userid, username, pwd, best);
     }
 
     @Override
@@ -57,6 +66,7 @@ public class UserEntity implements Serializable {
                 "userid=" + userid +
                 ", username='" + username + '\'' +
                 ", pwd='" + pwd + '\'' +
+                ", best=" + best +
                 '}';
     }
 }
