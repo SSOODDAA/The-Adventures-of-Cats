@@ -1,9 +1,6 @@
-//package com.example.caveadventure.service;
+package com.example.caveadventure.service;
 
-import org.springframework.stereotype.Service;
-
-//@Service
-//public class SigninService {
-//
-//
-//}
+public interface SigninService {
+    /* 登录功能 */
+    Boolean signin(String username, String password);
+}
