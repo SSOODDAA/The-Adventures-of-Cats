@@ -27,7 +27,7 @@ public interface UserMapper {
      * @param username 用户输入的新名称
      * @return 受影响的行数
      */
-    Integer updateUsernameByUserid(Integer userid,String username);
+    Integer updateUsernameByUserid(Integer userid, String username);
 
     /**
      *根据用户的userid来修改用户密码
@@ -35,7 +35,7 @@ public interface UserMapper {
      * @param pwd 用户输入的新密码
      * @return 返回值为受影响的行数
      */
-    Integer updatePasswordByUserid(Integer userid,String pwd);
+    Integer updatePasswordByUserid(Integer userid, String pwd);
 
     /**
      * 根据用户的id查询用户的数据
