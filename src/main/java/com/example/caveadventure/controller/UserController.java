@@ -11,25 +11,25 @@ import javax.servlet.http.HttpSession;
 
 
 @RestController
-@RequestMapping("CaveAdventure/users")
+@RequestMapping("users")
 public class UserController extends BaseController{
     @Autowired
     private UserService userservice;
 
-    @RequestMapping("reg")
+    @RequestMapping("/reg")
     public JsonResult<Void> reg(UserEntity user){
         userservice.reg(user);
         return new JsonResult<>(OK);
     }
 
-    @RequestMapping("login")
+    @RequestMapping("/login")
     public JsonResult<UserEntity> login(String username, String password, HttpSession session){
         UserEntity data = userservice.login(username, password);
 
         session.setAttribute("uid", data.getUserid());
         session.setAttribute("username", data.getUsername());
 
-        return new JsonResult<UserEntity>(OK, data);
+        /return new JsonResult<UserEntity>(OK, data);
     }
 
 
