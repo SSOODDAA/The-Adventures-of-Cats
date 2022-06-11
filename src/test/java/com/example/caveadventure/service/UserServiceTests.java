@@ -48,10 +48,9 @@ public class UserServiceTests {
     @Test
     public void updateUsername(){
         try{
+            userservice.updateUsername(9, "newdog");
 
-            userservice.updateUsername(userid, "newdog");
-
-            user = userservice.findByUserid(userid);
+            UserEntity user = userservice.findByUserid(9);
             System.out.println("更新后用户名为：" + user.getUsername());
         } catch (ServiceException e){
             System.out.println("修改用户名失败！");
@@ -63,13 +62,9 @@ public class UserServiceTests {
     @Test
     public void updatePassword(){
         try{
-//            String username = "doge";
-//            String password = "ddooggee";
-//            UserEntity user = userservice.login(username, password);
-            Integer userid = user.getUserid();
-            userservice.updatePassword(user.getUserid(), "newddooggee");
+            userservice.updatePassword(9, "newddooggee");
 
-            user = userservice.findByUserid(userid);
+            UserEntity user = userservice.findByUserid(9);
             System.out.println("更新后密码为：" + user.getPwd());
         }catch (ServiceException e){
             System.out.println("修改密码失败！");
