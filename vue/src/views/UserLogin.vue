@@ -7,10 +7,10 @@
         <div class="right">
           <el-form ref="form" :model="form" size="default" :rules="rules">
             <el-form-item class="loginItem" prop="username">
-              <el-input prefix-icon="el-icon-user" v-model="form.username" placeholder="请输入账号"></el-input>
+              <el-input prefix-icon="Avatar" v-model="form.username" placeholder="请输入账号"></el-input>
             </el-form-item>
             <el-form-item class="loginItem" prop="password">
-              <el-input prefix-icon="el-icon-lock" v-model="form.password" show-password placeholder="请输入密码"></el-input>
+              <el-input prefix-icon="Lock" v-model="form.password" show-password placeholder="请输入密码"></el-input>
             </el-form-item>
             <el-form-item class="loginItem">
               <el-button class="loginbtn" style="display:block;margin:0 auto" type="primary" id="btn" @click="login">登 录</el-button>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import request from "@/utils/request";
 export default {
   name: "UserLogin",
   data() {
@@ -68,6 +69,30 @@ export default {
       }
     }
     window.onresize()
+  },
+  methods:{
+    login(){
+      this.$refs['form'].validate((valid) => {
+        if(valid) {
+          request.post("users/login",this.form).then(res =>{
+            if(res.state==='OK'){
+              this.$message({
+                type:"success",
+                message:"登录成功"
+              })
+              sessionStorage.setItem("user",JSON.stringify(res.data))//缓存用户信息
+              //登录成功更新当前路由,进入主界面
+              this.$router.push("/maingame")
+            }else{
+              this.$message({
+                type:"error",
+                message:res.msg
+              })
+            }
+          })
+        }
+          })
+    }
   }
 }
 </script>
