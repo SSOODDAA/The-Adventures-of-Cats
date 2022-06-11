@@ -1,5 +1,6 @@
 package com.example.caveadventure.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
