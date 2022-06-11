@@ -38,4 +38,24 @@ public class UserMapperTests {
         UserEntity user=userMapper.findByUsername("Judy");
         System.out.println(user);
     }
+
+    @Test
+    public void updateUsernameByUserid()
+    {
+        Integer rows=userMapper.updateUsernameByUserid(5,"Sally");
+        System.out.println(rows);
+    }
+    @Test
+    public void updatePasswordByUserid()
+    {
+        Integer rows=userMapper.updatePasswordByUserid(1,"zxc");
+        System.out.println(rows);
+    }
+
+    @Test
+    public void findByUserid()
+    {
+        UserEntity user=userMapper.findByUserid(1);
+        System.out.println("最高分为"+user.getBest());
+    }
 }
