@@ -1,20 +1,20 @@
 <template>
   <div class="loginPage">
     <div :style="fixStyle">
-      <div style="text-align: center; padding: 10px;"><img src="../assets/title.png" width="700"/></div>
+      <div style="text-align: center;"><img src="../assets/title.png" width="800"/></div>
       <div class="loginBox"> <!--控制表单样式 -->
         <div class="left"></div>
         <div class="right">
-          <el-form ref="form" :model="form" size="default" :rules="rules">
+          <el-form ref="form" size="large" :model="form" :rules="rules">
             <el-form-item class="loginItem" prop="username">
-              <el-input prefix-icon="Avatar" v-model="form.username" placeholder="请输入账号"></el-input>
+              <el-input prefix-icon="Avatar" style="font-size: large" v-model="form.username" placeholder="请输入账号"></el-input>
             </el-form-item>
             <el-form-item class="loginItem" prop="password">
-              <el-input prefix-icon="Lock" v-model="form.password" show-password placeholder="请输入密码"></el-input>
+              <el-input prefix-icon="Lock" style="font-size: large" v-model="form.password" show-password placeholder="请输入密码"></el-input>
             </el-form-item>
             <el-form-item class="loginItem">
-              <el-button class="loginbtn" style="display:block;margin:0 auto" type="primary" id="btn" @click="login">登 录</el-button>
-              <el-button type="text" @click="$router.push('/register')">前往注册 >> </el-button>
+              <el-button class="loginbtn" style="font-size: large;" type="primary" id="btn" @click="login">登 录</el-button>
+              <el-button type="text" style="font-size: large" @click="$router.push('/register')">前往注册 >> </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -74,8 +74,8 @@ export default {
     login(){
       this.$refs['form'].validate((valid) => {
         if(valid) {
-          request.post("users/login",this.form).then(res =>{
-            if(res.state==='OK'){
+          request.post("/users/login",this.form).then(res =>{
+            if(res.state===200){
               this.$message({
                 type:"success",
                 message:"登录成功"
@@ -86,7 +86,7 @@ export default {
             }else{
               this.$message({
                 type:"error",
-                message:res.msg
+                message:res.message
               })
             }
           })
@@ -110,43 +110,42 @@ export default {
   background-size: 100% 100%;
 }
 .loginBox{
-  width: 600px;
-  height: 400px;
+  width: 800px;
+  height: 500px;
   margin: 0px auto;
   background: url(../assets/loginform.png) no-repeat;
   background-size: 100% 100%;
   position: absolute;
   left: 50%;
   right: 50%;
-  margin-left: -300px;
+  margin-left: -400px;
   margin-right: -200px;
   display: flex;
-
 }
 .left{
-  width:170px;
+  width:125px;
   height: 400px;
   background: white;
   opacity: 0%;
 }
 .right{
-  width: 430px;
+  width: 550px;
   display: flex;
   flex-direction: column;
   align-content: center;
+  margin-top: 120px;
 }
 .loginItem{
-  width: 280px;
-  height: 20px;
-  padding: 10px;
-  margin: 80px 0px 30px 0px;
+  padding: 20px;
 }
 .loginbtn{
   background:url(../assets/button.png) no-repeat;
   background-size: 100% 100%;
   width: 150px;
-  height: 40px;
+  height: 45px;
   border-style: none;
+  margin-left: 160px;
+  /*margin-right: 50px;*/
 }
 .loginbtn:hover{
   color: #fff;

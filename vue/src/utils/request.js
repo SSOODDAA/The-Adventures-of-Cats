@@ -2,28 +2,30 @@ import axios from 'axios'
 import router from "@/router";
 
 const request = axios.create({
-  baseURL: "CaveAdventure",
-  timeout: 5000
+   baseURL: "/api/CaveAdventure",
+   timeout: 5000
 })
 
-
+const whiteUrls = ["/users/login", '/users/register']
 // request 拦截器
 request.interceptors.request.use(config => {
   config.headers['Content-Type'] = 'application/json;charset=utf-8';
-
   // 取出sessionStorage里面缓存的用户信息
   let userJson = sessionStorage.getItem("user")
-  if(!userJson) {
-    router.push("/login")
-  }
-  else {
-    let user = JSON.parse(userJson);
-    config.headers['token'] = user.token;  // 设置请求头
+  if (!whiteUrls.includes(config.url)) {  // 校验请求白名单
+    if(!userJson) {
+      router.push("/login")
+    }
+    else {
+      let user = JSON.parse(userJson);
+      config.headers['token'] = user.token;  // 设置请求头
+    }
   }
   return config
 }, error => {
   return Promise.reject(error)
 });
+
 
 // response 拦截器,可以在接口响应后统一处理结果
 request.interceptors.response.use(
