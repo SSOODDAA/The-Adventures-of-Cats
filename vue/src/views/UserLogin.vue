@@ -9,8 +9,8 @@
             <el-form-item class="loginItem" prop="username">
               <el-input prefix-icon="Avatar" style="font-size: large" v-model="form.username" placeholder="请输入账号"></el-input>
             </el-form-item>
-            <el-form-item class="loginItem" prop="password">
-              <el-input prefix-icon="Lock" style="font-size: large" v-model="form.password" show-password placeholder="请输入密码"></el-input>
+            <el-form-item class="loginItem" prop="pwd">
+              <el-input prefix-icon="Lock" style="font-size: large" v-model="form.pwd" show-password placeholder="请输入密码"></el-input>
             </el-form-item>
             <el-form-item class="loginItem">
               <el-button class="loginbtn" style="font-size: large;" type="primary" id="btn" @click="login">登 录</el-button>
@@ -35,7 +35,7 @@ export default {
         username:[
           {required:true,message:'请输入用户名',trigger:'blur'},
         ],
-        password:[
+        pwd:[
           {required:true,message:'请输入密码',trigger:'blur'},
         ],
       },
@@ -74,7 +74,12 @@ export default {
     login(){
       this.$refs['form'].validate((valid) => {
         if(valid) {
-          request.post("/users/login",this.form).then(res =>{
+          request.get("/users",{
+            params:{
+              username:this.form.username,
+              pwd:this.form.pwd,
+            }
+          }).then(res =>{
             if(res.state===200){
               this.$message({
                 type:"success",
