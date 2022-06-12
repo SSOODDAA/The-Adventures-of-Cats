@@ -2,8 +2,8 @@ import axios from 'axios'
 import router from "@/router";
 
 const request = axios.create({
-  // baseURL: "CaveAdventure",
-  timeout: 5000
+   baseURL: "/api/CaveAdventure",
+   timeout: 5000
 })
 
 const whiteUrls = ["/users/login", '/users/register']
@@ -14,8 +14,9 @@ request.interceptors.request.use(config => {
   let userJson = sessionStorage.getItem("user")
   if (!whiteUrls.includes(config.url)) {  // 校验请求白名单
     if(!userJson) {
-      router.push("/")
-    } else {
+      router.push("/login")
+    }
+    else {
       let user = JSON.parse(userJson);
       config.headers['token'] = user.token;  // 设置请求头
     }

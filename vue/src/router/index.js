@@ -5,14 +5,15 @@ import UserRegister from "@/views/UserRegister";
 const routes = [
   {
     path: '/',
+    name: 'Login',
+    redirect: "/login",
+    component: UserLogin
+  },
+  {
+    path: '/login',
     name: 'UserLogin',
     component: UserLogin,
   },
-  // {
-  //   path: '/login',
-  //   name: 'UserLogin',
-  //   component: UserLogin,
-  // },
   {
     path: '/maingame',
     name: 'MainGame',
