@@ -27,10 +27,13 @@ public class UserController extends BaseController{
         return new JsonResult<>(OK);
     }
 
-    public JsonResult<UserEntity> login(@RequestParam String username,@RequestParam String pwd){
+    @GetMapping
+    public JsonResult<UserEntity> login(@RequestParam String username,@RequestParam String pwd, HttpSession session){
         UserEntity data = userservice.login(username, pwd);
-//        session.setAttribute("uid", data.getUserid());
-//        session.setAttribute("username", data.getUsername());
+        // 存储在session中
+        session.setAttribute("userid", data.getUserid());
+        session.setAttribute("username", data.getUsername());
+        session.setAttribute("best", data.getBest());
 
         return new JsonResult<UserEntity>(OK, data);
     }
