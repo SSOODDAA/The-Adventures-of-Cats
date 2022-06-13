@@ -14,7 +14,7 @@ public class UserEntity implements Serializable {
     private Integer userid;
     private String username;
     private String pwd;
-    private Integer best;
+    private Integer best=0;
 
     public Integer getUserid() {
         return userid;

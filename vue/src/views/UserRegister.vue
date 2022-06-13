@@ -10,11 +10,14 @@
               <el-input prefix-icon="Avatar" style="font-size: large" v-model="form.username" placeholder="请输入账号"></el-input>
             </el-form-item>
             <el-form-item class="loginItem" prop="pwd">
-              <el-input prefix-icon="Lock" style="font-size: large" v-model="form.pwd" show-password placeholder="请输入密码"></el-input>
+              <el-input prefix-icon="Lock" style="font-size: large;" v-model="form.pwd" show-password placeholder="请输入密码"></el-input>
+            </el-form-item>
+            <el-form-item class="loginItem" prop="confirm">
+              <el-input prefix-icon="Lock" style="font-size: large;" v-model="form.confirm" show-password placeholder="请确认密码"></el-input>
             </el-form-item>
             <el-form-item class="loginItem">
-              <el-button class="loginbtn" style="font-size: large;" type="primary" id="btn" @click="login">登 录</el-button>
-              <el-button type="text" style="font-size: large" @click="$router.push('/register')">前往注册 >> </el-button>
+              <el-button class="loginbtn" style="font-size: large;" type="primary" id="btn" @click="register">注 册</el-button>
+              <el-button type="text" style="font-size: large" @click="$router.push('/login')">返回登录 >> </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -26,7 +29,7 @@
 <script>
 import request from "@/utils/request";
 export default {
-  name: "UserLogin",
+  name: "UserRegister",
   data() {
     return {
       fixStyle:'',
@@ -37,6 +40,9 @@ export default {
         ],
         pwd:[
           {required:true,message:'请输入密码',trigger:'blur'},
+        ],
+        confirm: [
+          {required: true, message: '请确认密码', trigger: 'blur'},
         ],
       },
     }
@@ -71,23 +77,24 @@ export default {
     window.onresize()
   },
   methods:{
-    login(){
+    register(){
+      if(this.form.pwd !==this.form.confirm){
+        this.$message({
+          type: "error",
+          message: '2次密码输入不一致！'
+        })
+        return
+      }
       this.$refs['form'].validate((valid) => {
         if(valid) {
-          request.get("/users",{
-            params:{
-              username:this.form.username,
-              pwd:this.form.pwd,
-            }
-          }).then(res =>{
+          request.post("/users",this.form).then(res =>{
             if(res.state===200){
               this.$message({
                 type:"success",
-                message:"登录成功"
+                message:"注册成功"
               })
-              sessionStorage.setItem("user",JSON.stringify(res.data))//缓存用户信息
-              //登录成功更新当前路由,进入主界面
-              this.$router.push("/maingame")
+              //缓存成功更新当前路由,进入登录界面
+              this.$router.push("/login")
             }else{
               this.$message({
                 type:"error",
@@ -96,7 +103,7 @@ export default {
             }
           })
         }
-          })
+      })
     }
   }
 }
@@ -141,7 +148,7 @@ export default {
   margin-top: 120px;
 }
 .loginItem{
-  padding: 20px;
+  padding: 10px;
 }
 .loginbtn{
   background:url(../assets/button.png) no-repeat;

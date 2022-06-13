@@ -20,16 +20,4 @@ public class CaveAdventureApplication {
     public static void main(String[] args) {
         SpringApplication.run(CaveAdventureApplication.class, args);
     }
-
-    @Bean
-    public MultipartConfigElement getMultipartConfigElement() {
-        MultipartConfigFactory factory = new MultipartConfigFactory();
-        // DataSize dataSize = DataSize.ofMegabytes(10);
-        // 设置文件最大10M，DataUnit提供5中类型B,KB,MB,GB,TB
-        factory.setMaxFileSize(DataSize.of(10, DataUnit.MEGABYTES));
-        factory.setMaxRequestSize(DataSize.of(10, DataUnit.MEGABYTES));
-        // 设置总上传数据总大小10M
-        return factory.createMultipartConfig();
-    }
-
 }
