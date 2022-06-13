@@ -37,12 +37,15 @@ export default {
       rules:{
         username:[
           {required:true,message:'请输入用户名',trigger:'blur'},
+          {min:3,max:8,message: '长度在3-8之间',tigger:'blur'},
         ],
         pwd:[
           {required:true,message:'请输入密码',trigger:'blur'},
+          {min:3,max:8,message: '长度在3-8之间',tigger:'blur'},
         ],
         confirm: [
           {required: true, message: '请确认密码', trigger: 'blur'},
+          {min:3,max:8,message: '长度在3-8之间',tigger:'blur'},
         ],
       },
     }

@@ -1,7 +1,8 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import UserLogin from "@/views/UserLogin";
-import MainGame from "@/views/MainGame";
+import HomePage from "@/views/HomePage";
 import UserRegister from "@/views/UserRegister";
+import PersonalCenter from "@/views/PersonalCenter";
 const routes = [
   {
     path: '/',
@@ -15,14 +16,19 @@ const routes = [
     component: UserLogin,
   },
   {
-    path: '/maingame',
-    name: 'MainGame',
-    component: MainGame,
+    path: '/home',
+    name: 'HomePage',
+    component: HomePage,
   },
   {
     path: '/register',
     name: 'UserRegister',
     component: UserRegister,
+  },
+  {
+    path: '/person',
+    name: 'PersonalCenter',
+    component: PersonalCenter,
   },
 ]
 const router = createRouter({

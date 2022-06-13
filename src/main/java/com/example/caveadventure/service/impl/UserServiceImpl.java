@@ -3,10 +3,7 @@ package com.example.caveadventure.service.impl;
 import com.example.caveadventure.dao.UserMapper;
 import com.example.caveadventure.entity.UserEntity;
 import com.example.caveadventure.service.UserService;
-import com.example.caveadventure.service.ex.InsertException;
-import com.example.caveadventure.service.ex.PasswordNotMatchException;
-import com.example.caveadventure.service.ex.UserNotFoundException;
-import com.example.caveadventure.service.ex.UsernameDuplicateException;
+import com.example.caveadventure.service.ex.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +24,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserEntity login(String username, String password){
-
-        UserEntity res = usermapper.findByUsername(username);
-
         // 用户不存在
+        UserEntity res = usermapper.findByUsername(username);
         if(res == null){
             throw new UserNotFoundException("用户数据不存在！");
         }
@@ -62,4 +57,39 @@ public class UserServiceImpl implements UserService {
             throw new InsertException("添加数据出现异常！请联系开发人员！");
         }
     }
+
+    /**
+     * 修改用户名
+     * @param userid id
+     * @param username 更新后用户名
+     */
+    @Override
+    public void updateUsername(Integer userid, String username){
+        // 判断更改后的用户名是否已被使用
+        UserEntity res = usermapper.findByUsername(username);
+        if(res != null){
+            throw new UsernameDuplicateException("更新后用户名[" + username + "]已经被占用!");
+        }
+
+        // 依据userid更新用户名
+        Integer rows = usermapper.updateUsernameByUserid(userid, username);
+        if(rows != 1){
+            throw new UpdateException("用户名更新出现异常！请联系开发人员！");
+        }
+    }
+
+    @Override
+    public void updatePassword(Integer userid, String pwd){
+        // 依据userid更新密码
+        Integer rows = usermapper.updatePasswordByUserid(userid, pwd);
+        if(rows != 1){
+            throw new UpdateException("密码更新出现异常！请联系开发人员！");
+        }
+    }
+
+    @Override
+    public UserEntity findByUserid(Integer userid){
+        return usermapper.findByUserid(userid);
+    }
+
 }

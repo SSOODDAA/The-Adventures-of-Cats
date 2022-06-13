@@ -20,4 +20,5 @@ public class CaveAdventureApplication {
     public static void main(String[] args) {
         SpringApplication.run(CaveAdventureApplication.class, args);
     }
+
 }

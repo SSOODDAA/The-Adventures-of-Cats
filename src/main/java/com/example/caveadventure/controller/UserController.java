@@ -30,8 +30,6 @@ public class UserController extends BaseController{
     @GetMapping
     public JsonResult<UserEntity> login(@RequestParam String username,@RequestParam String pwd){
         UserEntity data = userservice.login(username, pwd);
-//        session.setAttribute("uid", data.getUserid());
-//        session.setAttribute("username", data.getUsername());
 
         return new JsonResult<UserEntity>(OK, data);
     }
