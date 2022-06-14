@@ -33,14 +33,19 @@ public class UserController extends BaseController{
 
     /* 更新 */
     @PutMapping
-    public JsonResult<UserEntity> update(Integer userid, String info){
-        userservice.updatePassword(userid, info);
+    public JsonResult<UserEntity> update(@RequestBody UserEntity user){
+        // 获取请求体中参数
+        Integer userid = user.getUserid();
+        String pwd = user.getPwd();
+        String username = user.getUsername();
 
-        userservice.updateUsername(userid, info);
+        // 根据参数进行更新
+        userservice.updatePassword(userid, pwd);
+        userservice.updateUsername(userid, username);
 
+        // 返回User
         UserEntity data = userservice.findByUserid(userid);
         return new JsonResult<UserEntity>(OK, data);
     }
-
 
 }
