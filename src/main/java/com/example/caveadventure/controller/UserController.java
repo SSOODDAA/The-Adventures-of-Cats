@@ -7,6 +7,7 @@ import java.io.Console;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +32,22 @@ public class UserController extends BaseController{
     public JsonResult<UserEntity> login(@RequestParam String username,@RequestParam String pwd){
         UserEntity data = userservice.login(username, pwd);
 
+        return new JsonResult<UserEntity>(OK, data);
+    }
+
+    @PutMapping
+    public JsonResult<UserEntity> update(@RequestBody UserEntity user){
+        // 获取请求体中参数
+        Integer userid = user.getUserid();
+        String pwd = user.getPwd();
+        String username = user.getUsername();
+
+        // 根据参数进行更新
+        userservice.updatePassword(userid, pwd);
+        userservice.updateUsername(userid, username);
+
+        // 返回User
+        UserEntity data = userservice.findByUserid(userid);
         return new JsonResult<UserEntity>(OK, data);
     }
 

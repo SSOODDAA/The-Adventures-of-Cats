@@ -82,7 +82,7 @@ export default {
       this.$refs['form'].validate((valid) => {
         if(valid) {
           request.put("/users",this.form).then(res =>{
-            console.log(res)
+            console.log(this.form)
             if(res.state===200){
               this.$message({
                 type:"success",
