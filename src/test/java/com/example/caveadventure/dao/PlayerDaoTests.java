@@ -18,7 +18,7 @@ public class PlayerDaoTests {
     public void insert()
     {
         PlayerEntity playerEntity=new PlayerEntity();
-        playerEntity.setUserid(1);
+        playerEntity.setUserid(2);
         playerEntity.setRoleid(1);
         playerEntity.setAdventure(1.00);
         playerEntity.setEndtime(300);

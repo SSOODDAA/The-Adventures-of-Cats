@@ -2,6 +2,8 @@ package com.example.caveadventure.dao;
 
 import com.example.caveadventure.entity.PlayerEntity;
 
+
+
 public interface PlayerDao {
     /**
      * 当前游戏档初始化
