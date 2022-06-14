@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace属性：用于指定当前的映射文件和哪个接口进行映射，需要指定接口的文件路径，需要标注包的完整路径接口-->
+<mapper namespace="com.example.caveadventure.dao.UserMapper">
+
+    <!--id属性：表示映射的接口中方法的名称，直接在标签的内容来编写SQL语句-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="userid">
+        INSERT INTO base_info(username,pwd,best)VALUES(
+        #{username},#{pwd},#{best})
+    </insert>
+
+    <!--
+         select语句在执行的时候，查询的结果是一个对象，多个对象
+        resultType:表示查询的结果集类型，只需要指定对应映射类的类型，并且包括完整包接口
+    -->
+    <select id="findByUsername" resultType="com.example.caveadventure.entity.UserEntity">
+        SELECT * FROM base_info WHERE username=#{username}
+    </select>
+
+</mapper>
