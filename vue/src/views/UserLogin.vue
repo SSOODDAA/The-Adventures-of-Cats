@@ -87,7 +87,7 @@ export default {
               })
               sessionStorage.setItem("user",JSON.stringify(res.data))//缓存用户信息
               //登录成功更新当前路由,进入主界面
-              this.$router.push("/home")
+              this.$router.push("/homepage")
             }else{
               this.$message({
                 type:"error",
@@ -104,13 +104,10 @@ export default {
 
 
 <style scoped>
-*{
-  /*初始化 清除页面元素的内外边距*/
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
 .loginPage{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
   background: url(../assets/Bg.png) no-repeat;
   background-size: 100% 100%;
 }

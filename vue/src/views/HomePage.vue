@@ -5,8 +5,8 @@
       <div class = "center">
         <input type = "button" value="新建游戏" />
         <input type = "button" value="继续游戏" />
-        <input type = "button" value="个人中心" />
-        <input type = "button" value="退出游戏" />
+        <input type = "button" value="个人中心" @click="$router.push('/person')" />
+        <input type = "button" value="退出游戏" @click="$router.push('/login')" />
       </div>
     </div>
 </div>

@@ -17,7 +17,7 @@
         </el-form-item>
         <el-form-item class="loginItem">
           <el-button class="btn" type="primary" @click="update">保 存</el-button>
-          <el-button class="btn" type="primary" @click="$router.push('/home')">返 回</el-button>
+          <el-button class="btn" type="primary" @click="$router.push('/homepage')">返 回</el-button>
         </el-form-item>
       </el-form>
     </div>
