@@ -78,6 +78,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * 更新用户密码
+     * @param userid  id
+     * @param pwd 密码
+     */
     @Override
     public void updatePassword(Integer userid, String pwd){
         // 依据userid更新密码
@@ -87,6 +92,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * 通过userid查找用户
+     * @param userid id
+     * @return 用户
+     */
     @Override
     public UserEntity findByUserid(Integer userid){
         return usermapper.findByUserid(userid);

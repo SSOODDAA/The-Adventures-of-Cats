@@ -22,12 +22,14 @@ public class UserController extends BaseController{
     @Autowired
     private UserService userservice;
 
+    /* 注册 */
     @PostMapping
     public JsonResult<Void> reg(@RequestBody UserEntity user){
         userservice.reg(user);
         return new JsonResult<>(OK);
     }
 
+    /* 登录 */
     @GetMapping
     public JsonResult<UserEntity> login(@RequestParam String username,@RequestParam String pwd){
         UserEntity data = userservice.login(username, pwd);
