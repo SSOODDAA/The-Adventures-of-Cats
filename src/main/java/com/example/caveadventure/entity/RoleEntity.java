@@ -13,7 +13,7 @@ public class RoleEntity implements Serializable {
     private String name;
     private Integer heart;
     private Integer baglimit;
-    private Float adventure;
+    private Double adventure;
 
     public Integer getId() {
         return id;
@@ -47,11 +47,11 @@ public class RoleEntity implements Serializable {
         this.baglimit = badlimit;
     }
 
-    public Float getAdventure() {
+    public Double getAdventure() {
         return adventure;
     }
 
-    public void setAdventure(Float adventure) {
+    public void setAdventure(Double adventure) {
         this.adventure = adventure;
     }
 
