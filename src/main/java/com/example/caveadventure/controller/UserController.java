@@ -3,6 +3,7 @@ package com.example.caveadventure.controller;
 import com.example.caveadventure.entity.UserEntity;
 import com.example.caveadventure.service.UserService;
 import com.example.caveadventure.util.JsonResult;
+
 import java.io.Console;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import javax.servlet.http.HttpSession;
 
@@ -28,6 +30,7 @@ public class UserController extends BaseController{
         userservice.reg(user);
         return new JsonResult<>(OK);
     }
+
 
     /* 登录 */
     @GetMapping
