@@ -19,4 +19,20 @@
         SELECT * FROM base_info WHERE username=#{username}
     </select>
 
+    <update id="updateUsernameByUserid">
+        UPDATE base_info SET
+            username=#{username}
+        WHERE userid=#{userid}
+    </update>
+
+    <update id="updatePasswordByUserid">
+        UPDATE base_info SET
+           pwd=#{pwd}
+        WHERE userid=#{userid}
+    </update>
+
+    <select id="findByUserid" resultType="com.example.caveadventure.entity.UserEntity">
+        SELECT * FROM base_info WHERE userid=#{userid}
+    </select>
+
 </mapper>
