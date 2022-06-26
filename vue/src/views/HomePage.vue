@@ -3,10 +3,10 @@
   <div :style="fixStyle">
     <div style="text-align: center;"><img src="../assets/title.png" width="800"/></div>
       <div class = "center">
-        <input type = "button" value="新建游戏" />
-        <input type = "button" value="继续游戏" />
-        <input type = "button" value="个人中心" @click="$router.push('/person')" />
-        <input type = "button" value="退出游戏" @click="$router.push('/login')" />
+        <input type = "button" value="新建游戏" @click="newgame"/>
+        <input type = "button" value="继续游戏" @click="congame"/>
+        <input type = "button" value="个人中心" @click="percen"/>
+        <input type = "button" value="退出游戏" @click="login"/>
       </div>
     </div>
 </div>
@@ -14,8 +14,24 @@
 
 <script>
 export default {
-  name: "HomePage"
+  name: "HomePage",
+    methods:{
+        newgame(){
+            this.$router.push('/chooserole')
+        },
+        congame(){
+            this.$router.push('/maingame')
+        },
+        percen(){
+            this.$router.push('/person')
+        },
+        login(){
+            this.$router.push('/login')
+        }
+
+    }
 }
+
 </script>
 
 <style scoped = "less">
@@ -65,5 +81,12 @@ input[type = "button"]{
   margin-bottom: 1.2em;
   margin-left: 1em;
   margin-right: 1em;
+}
+
+input[type = "button"]:hover{
+    color: #fff;
+    border-radius: 5px;
+    border-style: none;
+    box-shadow: 0 0 10px steelblue,0 0 25px steelblue,0 0 50px steelblue,0 0 100px steelblue;
 }
 </style>
