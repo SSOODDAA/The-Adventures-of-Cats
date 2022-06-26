@@ -9,5 +9,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PlayerReposity extends MongoRepository<PlayerEntity,Integer> {
+    /**
+     * 在数据库中增加一条玩家数据，不用实现，使用自带的
+     */
 
 }
