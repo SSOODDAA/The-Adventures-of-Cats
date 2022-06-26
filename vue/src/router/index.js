@@ -2,9 +2,9 @@ import {createRouter, createWebHistory} from 'vue-router'
 import UserLogin from "@/views/UserLogin";
 import UserRegister from "@/views/UserRegister";
 import HomePage from "@/views/HomePage";
-// import ChooseRole from "@/views/ChooseRole";
 import PersonalCenter from "@/views/PersonalCenter";
 import ChooseRole from "@/views/ChooseRole";
+import MainGame from "@/views/MainGame";
 const routes = [
   {
     path: '/',
@@ -33,9 +33,14 @@ const routes = [
     component: HomePage,
   },
   {
-     path: '/chooserole',
-     name: 'ChooseRole',
-     component: ChooseRole,
+    path: '/chooserole',
+    name: 'ChooseRole',
+    component: ChooseRole,
+  },
+  {
+    path: '/maingame',
+    name: 'MainGame',
+    component: MainGame,
   }
 ]
 const router = createRouter({

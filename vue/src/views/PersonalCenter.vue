@@ -44,35 +44,6 @@ export default {
       },
     }
   },
-  mounted() {
-    window.onresize = () => {
-      const windowWidth = document.body.clientWidth
-      const windowHeight = document.body.clientHeight
-      const windowAspectRatio = windowHeight / windowWidth
-      let videoWidth
-      let videoHeight
-      if (windowAspectRatio < 0.5625) {
-        videoWidth = windowWidth
-        videoHeight = videoWidth * 0.5625
-        this.fixStyle = {
-          height: windowWidth * 0.5625 + 'px',
-          width: windowWidth + 'px',
-          'margin-bottom': (windowHeight - videoHeight) / 2 + 'px',
-          'margin-left': 'initial'
-        }
-      } else {
-        videoHeight = windowHeight
-        videoWidth = videoHeight / 0.5625
-        this.fixStyle = {
-          height: windowHeight + 'px',
-          width: windowHeight / 0.5625 + 'px',
-          'margin-left': (windowWidth - videoWidth) / 2 + 'px',
-          'margin-bottom': 'initial'
-        }
-      }
-    }
-    window.onresize()
-  },
   created() {
     let str= sessionStorage.getItem("user")||"{}"
     this.form=JSON.parse(str)
@@ -104,17 +75,13 @@ export default {
 </script>
 
 <style scoped>
-*{
-  /*初始化 清除页面元素的内外边距*/
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
 .personPage{
+  box-sizing: border-box;
   background: url(../assets/Bg.png) no-repeat;
   background-size: 100% 100%;
+  min-height: 200vh;
+  background-attachment: fixed;
 }
-
 .personform{
   width: 600px;
   height: 400px;
