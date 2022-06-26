@@ -16,8 +16,8 @@ public interface MapReposity extends MongoRepository<MapEntity,Integer> {
 
     /**
      * 通过用户id获取该用户游戏地图信息
-     * @param userid
-     * @return
+     * @param userid 用户id
+     * @return 该地图对象
      */
     @Query(value = "{'_id':?0}",fields = "{}")
     public MapEntity findByUserid(Integer userid);
@@ -28,8 +28,8 @@ public interface MapReposity extends MongoRepository<MapEntity,Integer> {
 
     /**
      * 通过userid对用户地图信息进行删除
-     * @param userid
-     * @return
+     * @param userid 用户id
+     * @return 返回数值
      */
     public int deleteByUserid(Integer userid);
 

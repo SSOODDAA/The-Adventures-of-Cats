@@ -55,14 +55,14 @@ public class MapServiceImpl implements MapService {
         mapEntity.setNowroomx(0);
         mapEntity.setNowroomy(0);
         mapEntity.setRoute(null);   // 路径存疑，路径里是否要保存当前位置？
-        mapReposity.save(mapEntity);
+        mapReposity.insert(mapEntity);
         return res;
     }
 
     /**
      *
      */
-    public
+
 
 
 
