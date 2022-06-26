@@ -47,15 +47,15 @@ name: "ChooseRole",
     },
     methods:{
         normal(){
-            this.isClick=0
-            console.log(this.isClick)
-        },
-        spy(){
             this.isClick=1
             console.log(this.isClick)
         },
-        superman(){
+        spy(){
             this.isClick=2
+            console.log(this.isClick)
+        },
+        superman(){
+            this.isClick=3
             console.log(this.isClick)
         },
         confirm(){
