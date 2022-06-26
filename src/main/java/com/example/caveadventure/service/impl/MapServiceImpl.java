@@ -56,8 +56,8 @@ public class MapServiceImpl implements MapService {
         mapEntity.setMagicroom(magicRoom);
         mapEntity.setNowroomx(0);
         mapEntity.setNowroomy(0);
-        mapEntity.setRoute(null);   // 路径存疑，路径里是否要保存当前位置？
-        mapReposity.save(mapEntity);  // 记得改回来！！！
+        mapEntity.setRoute(null);
+        mapReposity.insert(mapEntity);
         return res;
     }
 

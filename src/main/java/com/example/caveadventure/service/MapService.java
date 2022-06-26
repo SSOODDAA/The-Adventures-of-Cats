@@ -13,4 +13,6 @@ public interface MapService {
     /* 深搜 */
     int dfs(int[][] map,boolean[][] visited,int x,int y);
 
+
+
 }

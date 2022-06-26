@@ -32,4 +32,42 @@ public class PlayerReposityTests {
         }
     }
 
+    @Test
+    public void find()
+    {
+        PlayerEntity result=playerReposity.findByUserid(1);
+        if(result!=null){
+            System.out.println(result.toString());
+        } else{
+            System.out.println("查找失败");
+        }
+    }
+
+    @Test
+    public void update()
+    {
+        PlayerEntity playerEntity=new PlayerEntity();
+        playerEntity.setUserid(3);
+        playerEntity.setRoleid(1);
+        playerEntity.setAdventure(1.00);
+        playerEntity.setEndtime(300);
+        playerEntity.setBaglimit(100);
+        playerEntity.setHeart(200);
+        playerEntity.setProduct(null);
+        PlayerEntity result=playerReposity.save(playerEntity);
+        if(result!=null){
+            System.out.println(result.toString());
+        } else{
+            System.out.println("更新失败");
+        }
+    }
+
+    @Test
+    public void delete()
+    {
+        int flag;
+        flag=playerReposity.deleteByUserid(3);
+        System.out.println(flag);
+    }
+
 }
