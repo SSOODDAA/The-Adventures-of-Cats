@@ -34,14 +34,16 @@ public class MapServiceImpl implements MapService {
             stones = randSeveralNums(5, 0, 24, null);
             // 1表示石头
             for(int i : stones){
-                System.out.println("坐标为：("+i/5+","+i%5+")");
                 map[i/5][i%5] = 1;
             }
         }while(!judgeConnected(map));
 
         // 2代表魔法房间
         List<Integer> magic = randSeveralNums(1, 0, 24, stones);
-        int magicRoom = magic.get(0);
+        int magicRoom = magic.get(magic.size()-1);
+
+        map[magicRoom/5][magicRoom%5] = 2;
+
         // 依次返回石头与魔法房间的序号
         List<Integer> res = new ArrayList<Integer>();
         res.addAll(stones);
@@ -55,14 +57,14 @@ public class MapServiceImpl implements MapService {
         mapEntity.setNowroomx(0);
         mapEntity.setNowroomy(0);
         mapEntity.setRoute(null);   // 路径存疑，路径里是否要保存当前位置？
-        mapReposity.save(mapEntity);
+        mapReposity.save(mapEntity);  // 记得改回来！！！
         return res;
     }
 
     /**
      *
      */
-    public
+
 
 
 
@@ -77,7 +79,10 @@ public class MapServiceImpl implements MapService {
     public List<Integer> randSeveralNums(int len, int start, int end, List<Integer> sub){
         List<Integer> list = new ArrayList<Integer>();
         // 排除已经添加项
-        list.addAll(sub);
+        if (sub != null){
+            list.addAll(sub);
+            len += list.size();
+        }
 
         Random rand = new Random();
         while(list.size() != len){
