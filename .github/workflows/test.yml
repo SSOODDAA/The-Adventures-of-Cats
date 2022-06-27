@@ -54,22 +54,12 @@ jobs:
               # uses: calxus/mysql-deploy-action@a2c3adfffe4002b02a06c3deb43449d69803c21b
 			  uses: calxus/mysql-deploy-action@v1
 			  with:
-			  DATABASE_HOST: root
-			  DATABASE_PORT: 3306
-  	          DATABASE_NAME:caveadventure
-			  DATABASE_USERNAME: root
-			  DATABASE_PASSWORD: 123456
-    		       # Hostname used to connect to database
-   				    
-    			   # Port used to connect to database
+			      DATABASE_HOST: root
+			      DATABASE_PORT: 3306
+			      DATABASE_USERNAME: root
+			      DATABASE_PASSWORD: 123456
+				  DATABASE_NAME: caveadventure
     		       
-    			   # Name of database to connect to
-    			    
-    			   # Username used to connect to database
-    		 	    
-    			   # Password used to connect to database
-    	 		   
-    			   # Script run on database
    
 
 
