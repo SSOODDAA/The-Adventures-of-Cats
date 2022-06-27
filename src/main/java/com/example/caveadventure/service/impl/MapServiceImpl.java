@@ -1,7 +1,9 @@
 package com.example.caveadventure.service.impl;
 
 import com.example.caveadventure.dao.MapReposity;
+import com.example.caveadventure.dao.PlayerReposity;
 import com.example.caveadventure.entity.MapEntity;
+import com.example.caveadventure.entity.PlayerEntity;
 import com.example.caveadventure.service.MapService;
 import com.example.caveadventure.service.ex.UpdateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,12 @@ import java.util.Random;
 
 @Service
 public class MapServiceImpl implements MapService {
+    /* 地图操作 */
     @Autowired
     public MapReposity mapReposity;
+    /* 玩家操作 */
+    @Autowired
+    public PlayerReposity playerReposity;
 
     /**
      * 初始化游戏地图
@@ -163,7 +169,7 @@ public class MapServiceImpl implements MapService {
         {
             return mapEntity.getRoute();
         }
-        System.out.println("查找失败！");
+        System.out.println("查找失败");
         return null;
     }
 
@@ -251,7 +257,32 @@ public class MapServiceImpl implements MapService {
         mapReposity.save(mapEntity);
     }
 
+    /**
+     * 刷NPC事件
+     * @param userid 用户id
+     * @return NPC生成情况以及人物是否还活着
+     */
+    public List<Integer> randNPC(Integer userid){
+        // 0,1,2分别代表坏NPC，无NPC，好NPC状态
+        Random rand = new Random();
+        int npc = rand.nextInt(3);
 
+        // 玩家
+        PlayerEntity player = playerReposity.findByUserid(userid);
+        int oldHeart = player.getHeart();
+        // 依据npc情况更新血量
+        if(npc == 0){
+            player.setHeart(Math.max(0, oldHeart - 10));
+        }else if(npc == 2){
+            player.setHeart(Math.min(100, oldHeart + 10));
+        }
+        playerReposity.save(player);
 
+        // 结果返回两个元素，第一个表示npc类别，第二个表示角色的血量
+        List<Integer> res = new ArrayList<>();
+        res.add(npc);
+        res.add(player.getHeart());
+        return res;
+    }
 
 }

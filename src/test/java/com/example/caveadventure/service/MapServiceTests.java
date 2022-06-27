@@ -83,6 +83,10 @@ public class MapServiceTests {
         System.out.println("向下移动后路径："+route);
     }
 
+    @Test
+    public void npc(){
+
+    }
 
 
 }

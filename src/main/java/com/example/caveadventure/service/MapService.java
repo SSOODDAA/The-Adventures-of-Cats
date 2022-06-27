@@ -27,6 +27,7 @@ public interface MapService {
     void move(Integer userid, Integer action);
 
     /* 随机生成事件 */
-
+    /* 刷NPC */
+    List<Integer> randNPC(Integer userid);
 
 }
