@@ -2,8 +2,10 @@ package com.example.caveadventure.service.impl;
 
 import com.example.caveadventure.dao.MapReposity;
 import com.example.caveadventure.dao.PlayerReposity;
+import com.example.caveadventure.dao.ProductMapper;
 import com.example.caveadventure.entity.MapEntity;
 import com.example.caveadventure.entity.PlayerEntity;
+import com.example.caveadventure.entity.ProductEntity;
 import com.example.caveadventure.service.MapService;
 import com.example.caveadventure.service.ex.UpdateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -283,6 +285,16 @@ public class MapServiceImpl implements MapService {
         res.add(npc);
         res.add(player.getHeart());
         return res;
+    }
+
+
+
+    public List<ProductEntity> handbook(){
+        ProductMapper productMapper;
+
+        for(int i=1; i<=12; i++){
+
+        }
     }
 
 }

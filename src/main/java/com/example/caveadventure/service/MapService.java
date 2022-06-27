@@ -1,5 +1,7 @@
 package com.example.caveadventure.service;
 
+import com.example.caveadventure.entity.ProductEntity;
+
 import java.util.List;
 
 public interface MapService {
@@ -29,5 +31,8 @@ public interface MapService {
     /* 随机生成事件 */
     /* 刷NPC */
     List<Integer> randNPC(Integer userid);
+
+    /* 点击图鉴事件 */
+    List<ProductEntity> handbook();
 
 }
