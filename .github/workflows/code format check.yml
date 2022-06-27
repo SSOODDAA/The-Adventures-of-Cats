@@ -8,7 +8,9 @@ jobs:
   dotnet-format:
     runs-on: windows-latest
     steps:
- 
+      - name: fix
+        run: git config --global --add safe.directory "*"
+        
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
