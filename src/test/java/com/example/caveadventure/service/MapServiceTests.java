@@ -63,9 +63,9 @@ public class MapServiceTests {
         List<Integer> route=mapService.findRoute(userid);
         System.out.println("路径:"+route);
         List<Integer> dead=mapService.findDeadRoom(userid);
-        System.out.println("死房间为:"+dead);
+        System.out.println("死房间:"+dead);
         int magic= mapService.findMagicRoom(userid);
-        System.out.println("魔法房间为："+magic);
+        System.out.println("魔法房间："+magic);
     }
 
     /**
