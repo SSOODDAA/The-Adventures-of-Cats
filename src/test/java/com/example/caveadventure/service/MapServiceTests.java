@@ -19,6 +19,9 @@ public class MapServiceTests {
     @Autowired
     public MapService mapService;
 
+    /**
+     * 测试初始化地图功能
+     */
     @Test
     public void initMap(){
         int userid = 12;
@@ -47,4 +50,48 @@ public class MapServiceTests {
         }
 
     }
+
+    /**
+     * 测试查找功能
+     */
+    @Test
+    public void find()
+    {
+        int userid=12;
+        int[] nowRoom=mapService.findNowRoom(userid);
+        System.out.println("当前所处房间:"+nowRoom[0]+","+nowRoom[1]);
+        List<Integer> route=mapService.findRoute(userid);
+        System.out.println("路径:"+route);
+        List<Integer> dead=mapService.findDeadRoom(userid);
+        System.out.println("死房间为:"+dead);
+        int magic= mapService.findMagicRoom(userid);
+        System.out.println("魔法房间为："+magic);
+    }
+
+    /**
+     * 测试人物移动功能
+     */
+    @Test
+    public void move(){
+        int userid=12;
+        System.out.println("向下移动：");
+        mapService.move(userid, 2);
+
+        int[] nowRoom = mapService.findNowRoom(userid);
+        System.out.println("向下移动后坐标：("+nowRoom[0]+","+nowRoom[1]+")");
+        List<Integer> route = mapService.findRoute(userid);
+        System.out.println("向下移动后路径："+route);
+    }
+
+    @Test
+    public void npc(){
+        int userid = 12;
+        List<Integer> randNpc = mapService.randNPC(userid);
+        System.out.println("刷npc的情况为："+randNpc.get(0));
+        System.out.println("当前的血量为："+randNpc.get(1));
+
+        // 查数据库说明血量
+    }
+
+
 }

@@ -40,6 +40,7 @@ public class UserController extends BaseController{
         return new JsonResult<UserEntity>(OK, data);
     }
 
+    /* 修改 */
     @PutMapping
     public JsonResult<UserEntity> update(@RequestBody UserEntity user){
         // 获取请求体中参数

@@ -69,7 +69,7 @@ name: "ChooseRole",
             else{
                let str = sessionStorage.getItem("user")||"{}"
                 this.form = JSON.parse(str)
-                console.log(this.form.username)
+                console.log(this.form.id)
                 window.sessionStorage.setItem('roleid', JSON.stringify(this.isClick))//将roleid存入session
 
                 /*向后端传递选角和用户id信息*/

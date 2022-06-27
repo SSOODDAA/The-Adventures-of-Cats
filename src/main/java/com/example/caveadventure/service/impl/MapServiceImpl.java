@@ -1,10 +1,16 @@
 package com.example.caveadventure.service.impl;
 
 import com.example.caveadventure.dao.MapReposity;
+import com.example.caveadventure.dao.PlayerReposity;
+import com.example.caveadventure.dao.ProductMapper;
 import com.example.caveadventure.entity.MapEntity;
+import com.example.caveadventure.entity.PlayerEntity;
+import com.example.caveadventure.entity.ProductEntity;
 import com.example.caveadventure.service.MapService;
+import com.example.caveadventure.service.ex.UpdateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.RouteMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +18,16 @@ import java.util.Random;
 
 @Service
 public class MapServiceImpl implements MapService {
+    /* 地图操作 */
     @Autowired
     public MapReposity mapReposity;
+    /* 玩家操作 */
+    @Autowired
+    public PlayerReposity playerReposity;
+    /* 查物品 */
+    @Autowired
+    public ProductMapper productMapper;
+
 
     /**
      * 初始化游戏地图
@@ -60,13 +74,6 @@ public class MapServiceImpl implements MapService {
         mapReposity.insert(mapEntity);
         return res;
     }
-
-    /**
-     *
-     */
-
-
-
 
 
     /**
@@ -138,7 +145,165 @@ public class MapServiceImpl implements MapService {
         }
         return 1;
     }
+    /**
+     * 查找当前房间位置
+     * @param userid 用户id
+     * @return 当前房间位置(x,y)坐标
+     */
+    public int[] findNowRoom(Integer userid) {
+        MapEntity mapEntity=mapReposity.findByUserid(userid);
+        if (mapEntity!=null)
+        {
+            int[] nowRoom=new int[2];
+            nowRoom[0]=mapEntity.getNowroomx();
+            nowRoom[1]=mapEntity.getNowroomy();
+            return nowRoom;
+        }
+        System.out.println("查找失败！");
+        return null;
+    }
+
+    /**
+     * 查找玩家从游戏开始到当前所经历的路径
+     * @param userid 用户id
+     * @return 路径
+     */
+    public List<Integer> findRoute(Integer userid)
+    {
+        MapEntity mapEntity=mapReposity.findByUserid(userid);
+        if (mapEntity!=null)
+        {
+            return mapEntity.getRoute();
+        }
+        System.out.println("查找失败");
+        return null;
+    }
+
+    /**
+     * 查找地图中所有死房间的位置
+     * @param userid 用户id
+     * @return 死房间
+     */
+    public List<Integer> findDeadRoom(Integer userid)
+    {
+        MapEntity mapEntity=mapReposity.findByUserid(userid);
+        if (mapEntity!=null)
+        {
+            return mapEntity.getDeadroom();
+        }
+        System.out.println("查找失败！");
+        return null;
+    }
+
+    /**
+     * 查找地图中的魔法房间位置
+     * @param userid 用户id
+     * @return 地图中的魔法房间
+     */
+    public int findMagicRoom(Integer userid) {
+        MapEntity mapEntity=mapReposity.findByUserid(userid);
+        if (mapEntity!=null)
+        {
+            return mapEntity.getMagicroom();
+        }
+        System.out.println("查找失败！");
+        return 0;
+    }
+
+    /**
+     * 人物移动
+     * @param userid 用户id
+     * @param action 具体移动操作
+     */
+    public void move(Integer userid, Integer action){
+        // 查找老地图，更新为新地图
+        MapEntity oldMap = mapReposity.findByUserid(userid);
+        MapEntity mapEntity = new MapEntity();
+        // 获取当前位置
+        int nowroomx = oldMap.getNowroomx();
+        int nowroomy = oldMap.getNowroomy();
+
+        // 更新的参数：当前位置
+        if (action == 1){
+            nowroomy -= 1;  // 上
+        }else if (action == 2){
+            nowroomy += 1;  // 下
+        }else if (action == 3){
+            nowroomx -= 1;  // 左
+        }else {
+            nowroomx += 1;  // 右
+        }
+        // 检测合法性
+        if (nowroomx < 0 || nowroomx > 4 || nowroomy < 0 || nowroomy > 4){
+            return;
+        }
+
+        // 更新的参数：路径，把老点加进去
+        List<Integer> route = oldMap.getRoute();
+        int pos = 5*oldMap.getNowroomx()+ oldMap.getNowroomy();
+        if(route == null){
+            route = new ArrayList<Integer>();
+        }
+        else {
+            route.add(pos);
+        }
+
+        // 更新的参数：血量
+        /**
+         * 这里需要后期添加回退扣血
+         */
+
+        // 存储更新后的值
+        mapEntity.setUserid(userid);
+        mapEntity.setNowroomx(nowroomx);
+        mapEntity.setNowroomy(nowroomy);
+        mapEntity.setRoute(route);
+        mapEntity.setMagicroom(oldMap.getMagicroom());
+        mapEntity.setDeadroom(oldMap.getDeadroom());
+        mapReposity.save(mapEntity);
+    }
+
+    /**
+     * 刷NPC事件
+     * @param userid 用户id
+     * @return NPC生成情况以及人物是否还活着
+     */
+    public List<Integer> randNPC(Integer userid){
+        // 0,1,2分别代表坏NPC，无NPC，好NPC状态
+        Random rand = new Random();
+        int npc = rand.nextInt(3);
+
+        // 玩家
+        PlayerEntity player = playerReposity.findByUserid(userid);
+        int oldHeart = player.getHeart();
+        // 依据npc情况更新血量
+        if(npc == 0){
+            player.setHeart(Math.max(0, oldHeart - 10));
+        }else if(npc == 2){
+            player.setHeart(Math.min(100, oldHeart + 10));
+        }
+        playerReposity.save(player);
+
+        // 结果返回两个元素，第一个表示npc类别，第二个表示角色的血量
+        List<Integer> res = new ArrayList<>();
+        res.add(npc);
+        res.add(player.getHeart());
+        return res;
+    }
 
 
+    /**
+     * 点击图鉴查询所有物品与NPC信息
+     * @return 所有信息
+     */
+    public List<ProductEntity> handbook(){
+        List<ProductEntity> book = new ArrayList<>();
+
+        // 查询所有物品
+        for(int i=1; i<=12; i++){
+            book.add(productMapper.findById(i));
+        }
+        return book;
+    }
 
 }

@@ -67,7 +67,7 @@ public class MapReposityTests {
             System.out.println(result.toString());
         }
         else{
-            System.out.println("更新失败");
+            System.out.println("更新失败！");
         }
     }
 
