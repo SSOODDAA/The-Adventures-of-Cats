@@ -1,14 +1,20 @@
 package com.example.caveadventure.controller;
 
+import com.example.caveadventure.entity.PlayerEntity;
 import com.example.caveadventure.service.MapService;
+import com.example.caveadventure.service.ex.ServiceException;
 import com.example.caveadventure.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 这里的映射写法尚且存疑
+ */
 @RestController
 @RequestMapping("/CaveAdventure/game")
 public class MapController extends BaseController{
@@ -32,17 +38,32 @@ public class MapController extends BaseController{
         return new JsonResult<List<Integer>>(OK, res);
     }
 
-    @PutMapping
-    public JsonResult<Integer> move(Integer userid, Integer action){    // 需要对上下左右移动有编号，传入编号。如这里，上下左右，1234
-        // 更改当前位置
+    /**
+     * 人物移动上下左右事件与刷NPC
+     * @param userid 用户id
+     * @param action 移动方向
+     * @return 移动后坐标
+     */
+    @PutMapping("/move")
+    public JsonResult<List<Integer>> move(Integer userid, Integer action){    // 需要对上下左右移动有编号，传入编号。如这里，上下左右，1234
+        // 更改当前位置并刷npc
         mapService.move(userid, action);
+        List<Integer> randNpc = mapService.randNPC(userid);
 
-        // 返回当前位置的序号
+        if (randNpc.get(1) == 0){
+            throw new ServiceException("角色去世了！先这样写！");       // 去世了可能还需要修改
+        }
+
+        // 依次返回，刷出的npc情况，当前位置的序号，目前的血量
         int[] now = mapService.findNowRoom(userid);
-        return new JsonResult<Integer>(OK, 5*now[0]+now[1]);
+        List<Integer> res = new ArrayList<>();
+        res.add(randNpc.get(0));
+        res.add(5*now[0]+now[1]);
+        res.add(randNpc.get(1));
 
-        // 注意后期可能需要添加血量变化，变化后需要返回前端
+        return new JsonResult<List<Integer>>(OK, res);
     }
+
 
 
 
