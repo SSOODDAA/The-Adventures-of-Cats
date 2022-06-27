@@ -35,33 +35,7 @@
     </div>
     <div class="center">
       <div id="MapBorder">
-       <div id="MapArea">
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/Stone.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/Stone.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/Stone.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/Stone.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-         <img class="MapCell" src="../assets/maingame/headbg.png"/>
-       </div>
+        <MainMap></MainMap>
       </div>
     </div>
     <div class="right">
@@ -85,8 +59,10 @@
 </template>
 
 <script>
+import MainMap from "@/components/MainMap";
 export default {
-  name: "MainGame"
+  name: "MainGame",
+  components: {MainMap},
 }
 </script>
 

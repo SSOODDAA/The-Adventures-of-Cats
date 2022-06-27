@@ -76,9 +76,9 @@ name: "ChooseRole",
                 var param = new FormData()
                 param.append('userid', this.form.username)//用户账号
                 param.append('roleid',this.isClick)//选角信息
-                var url = "/CaveAdventure/role"//'获取数据的后台地址'
-                request.post("/users")
-                .post(url, param)
+                var url = "/role"//'获取数据的后台地址'
+                // request.post("/users")
+                request.post(url, param)
                 .then(({ data: res }) => {
                     if(res.state===200){
                         console.log("success")
