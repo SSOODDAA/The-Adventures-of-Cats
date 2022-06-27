@@ -26,5 +26,7 @@ public interface MapService {
     /* 人物移动 */
     void move(Integer userid, Integer action);
 
+    /* 随机生成事件 */
+
 
 }

@@ -74,13 +74,13 @@ public class MapServiceTests {
     @Test
     public void move(){
         int userid=12;
-        System.out.println("向上移动：");
-        mapService.move(userid, 1);
+        System.out.println("向下移动：");
+        mapService.move(userid, 2);
 
         int[] nowRoom = mapService.findNowRoom(userid);
-        System.out.println("向上移动后坐标：("+nowRoom[0]+","+nowRoom[1]+")");
+        System.out.println("向下移动后坐标：("+nowRoom[0]+","+nowRoom[1]+")");
         List<Integer> route = mapService.findRoute(userid);
-        System.out.println("向上移动后路径："+route);
+        System.out.println("向下移动后路径："+route);
     }
 
 

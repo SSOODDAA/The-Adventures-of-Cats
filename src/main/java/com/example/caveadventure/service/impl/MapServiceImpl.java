@@ -3,8 +3,10 @@ package com.example.caveadventure.service.impl;
 import com.example.caveadventure.dao.MapReposity;
 import com.example.caveadventure.entity.MapEntity;
 import com.example.caveadventure.service.MapService;
+import com.example.caveadventure.service.ex.UpdateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.RouteMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -205,12 +207,9 @@ public class MapServiceImpl implements MapService {
         // 查找老地图，更新为新地图
         MapEntity oldMap = mapReposity.findByUserid(userid);
         MapEntity mapEntity = new MapEntity();
-
-        // 更新的参数：路径
+        // 获取当前位置
         int nowroomx = oldMap.getNowroomx();
         int nowroomy = oldMap.getNowroomy();
-        List<Integer> route = oldMap.getRoute();
-        route.add(5*nowroomx+nowroomy);
 
         // 更新的参数：当前位置
         if (action == 1){
@@ -222,16 +221,31 @@ public class MapServiceImpl implements MapService {
         }else {
             nowroomx += 1;  // 右
         }
+        // 检测合法性
+        if (nowroomx < 0 || nowroomx > 4 || nowroomy < 0 || nowroomy > 4){
+            return;
+        }
+
+        // 更新的参数：路径，把老点加进去
+        List<Integer> route = oldMap.getRoute();
+        int pos = 5*oldMap.getNowroomx()+ oldMap.getNowroomy();
+        if(route == null){
+            route = new ArrayList<Integer>();
+        }
+        else {
+            route.add(pos);
+        }
+
         // 更新的参数：血量
         /**
          * 这里需要后期添加回退扣血
          */
 
-        // 存储
+        // 存储更新后的值
         mapEntity.setUserid(userid);
-        mapEntity.setRoute(route);
         mapEntity.setNowroomx(nowroomx);
         mapEntity.setNowroomy(nowroomy);
+        mapEntity.setRoute(route);
         mapEntity.setMagicroom(oldMap.getMagicroom());
         mapEntity.setDeadroom(oldMap.getDeadroom());
         mapReposity.save(mapEntity);
