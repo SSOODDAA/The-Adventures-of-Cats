@@ -32,6 +32,8 @@ jobs:
 
                 # 设置java11环境，附带maven
 
+            - name: Database Lab:realistic DB testing in CI
+              uses: postgres-ai/dle-github-actions@v0.1.1
 
 
             - run: mvn test
