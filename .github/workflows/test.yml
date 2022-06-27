@@ -32,7 +32,6 @@ jobs:
 
                 # 设置java11环境，附带maven
             - name: MongoDB in GitHub 
-            - name: Setup MySQL
               # You may pin to the exact commit or the version.
               # uses: supercharge/mongodb-github-action@e815fd8a9dfede09fd6e6c144f2c9f4875e933df
 
