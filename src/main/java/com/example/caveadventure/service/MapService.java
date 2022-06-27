@@ -12,6 +12,8 @@ public interface MapService {
     boolean judgeConnected(int[][] map);
     /* 深搜 */
     int dfs(int[][] map,boolean[][] visited,int x,int y);
+
+
     /*查找玩家当前所处的房间位置*/
     int[] findNowRoom(Integer userid);
     /*查找玩家从游戏开始到当前所经历的路径*/
@@ -21,6 +23,8 @@ public interface MapService {
     /*查找地图中的魔法房间位置*/
     int findMagicRoom(Integer userid);
 
+    /* 人物移动 */
+    void move(Integer userid, Integer action);
 
 
 }

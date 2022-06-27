@@ -61,13 +61,6 @@ public class MapServiceImpl implements MapService {
         return res;
     }
 
-    /**
-     *
-     */
-
-
-
-
 
     /**
      * 生成len个范围在[start, end]的随机数
@@ -202,4 +195,49 @@ public class MapServiceImpl implements MapService {
         System.out.println("查找失败！");
         return 0;
     }
+
+    /**
+     * 人物移动
+     * @param userid 用户id
+     * @param action 具体移动操作
+     */
+    public void move(Integer userid, Integer action){
+        // 查找老地图，更新为新地图
+        MapEntity oldMap = mapReposity.findByUserid(userid);
+        MapEntity mapEntity = new MapEntity();
+
+        // 更新的参数：路径
+        int nowroomx = oldMap.getNowroomx();
+        int nowroomy = oldMap.getNowroomy();
+        List<Integer> route = oldMap.getRoute();
+        route.add(5*nowroomx+nowroomy);
+
+        // 更新的参数：当前位置
+        if (action == 1){
+            nowroomy -= 1;  // 上
+        }else if (action == 2){
+            nowroomy += 1;  // 下
+        }else if (action == 3){
+            nowroomx -= 1;  // 左
+        }else {
+            nowroomx += 1;  // 右
+        }
+        // 更新的参数：血量
+        /**
+         * 这里需要后期添加回退扣血
+         */
+
+        // 存储
+        mapEntity.setUserid(userid);
+        mapEntity.setRoute(route);
+        mapEntity.setNowroomx(nowroomx);
+        mapEntity.setNowroomy(nowroomy);
+        mapEntity.setMagicroom(oldMap.getMagicroom());
+        mapEntity.setDeadroom(oldMap.getDeadroom());
+        mapReposity.save(mapEntity);
+    }
+
+
+
+
 }

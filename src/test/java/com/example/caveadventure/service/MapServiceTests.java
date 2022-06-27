@@ -19,6 +19,9 @@ public class MapServiceTests {
     @Autowired
     public MapService mapService;
 
+    /**
+     * 测试初始化地图功能
+     */
     @Test
     public void initMap(){
         int userid = 12;
@@ -48,6 +51,9 @@ public class MapServiceTests {
 
     }
 
+    /**
+     * 测试查找功能
+     */
     @Test
     public void find()
     {
@@ -61,4 +67,22 @@ public class MapServiceTests {
         int magic= mapService.findMagicRoom(userid);
         System.out.println("魔法房间："+magic);
     }
+
+    /**
+     * 测试人物移动功能
+     */
+    @Test
+    public void move(){
+        int userid=12;
+        System.out.println("向上移动：");
+        mapService.move(userid, 1);
+
+        int[] nowRoom = mapService.findNowRoom(userid);
+        System.out.println("向上移动后坐标：("+nowRoom[0]+","+nowRoom[1]+")");
+        List<Integer> route = mapService.findRoute(userid);
+        System.out.println("向上移动后路径："+route);
+    }
+
+
+
 }
