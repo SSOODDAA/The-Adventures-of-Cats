@@ -23,15 +23,15 @@ jobs:
     
  
       - name: Install dotnet-format
-        run: dotnet tool install -g dotnet-format
+        run: dotnet tool install -g dotnetCampus.EncodingNormalior
         
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
          dotnet-version: 3.1.300
          
-      - name: Run dotnet format
-        run: dotnet format
+      - name: Fix encoding
+        run: EncodingNormalior -f . --TryFix true
  
       - name: Commit files
         # 下面将使用机器人的账号，你可以替换为你自己的账号
