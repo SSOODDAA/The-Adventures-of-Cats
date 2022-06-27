@@ -138,7 +138,68 @@ public class MapServiceImpl implements MapService {
         }
         return 1;
     }
+    /**
+     * 查找当前房间位置
+     * @param userid 用户id
+     * @return 当前房间位置(x,y)坐标
+     */
+    public int[] findNowRoom(Integer userid) {
+        MapEntity mapEntity=mapReposity.findByUserid(userid);
+        if (mapEntity!=null)
+        {
+            int[] nowRoom=new int[2];
+            nowRoom[0]=mapEntity.getNowroomx();
+            nowRoom[1]=mapEntity.getNowroomy();
+            return nowRoom;
+        }
+        System.out.println("查找失败！");
+        return null;
+    }
 
+    /**
+     * 查找玩家从游戏开始到当前所经历的路径
+     * @param userid 用户id
+     * @return 路径
+     */
+    public List<Integer> findRoute(Integer userid)
+    {
+        MapEntity mapEntity=mapReposity.findByUserid(userid);
+        if (mapEntity!=null)
+        {
+            return mapEntity.getRoute();
+        }
+        System.out.println("查找失败！");
+        return null;
+    }
 
+    /**
+     * 查找地图中所有死房间的位置
+     * @param userid 用户id
+     * @return 死房间
+     */
+    public List<Integer> findDeadRoom(Integer userid)
+    {
+        MapEntity mapEntity=mapReposity.findByUserid(userid);
+        if (mapEntity!=null)
+        {
+            return mapEntity.getDeadroom();
+        }
+        System.out.println("查找失败！");
+        return null;
+    }
 
+    /**
+     * 查找地图中的魔法房间位置
+     * @param userid 用户id
+     * @return 地图中的魔法房间
+     */
+    public int findMagicRoom(Integer userid) {
+        MapEntity mapEntity=mapReposity.findByUserid(userid);
+        if (mapEntity!=null)
+        {
+            return mapEntity.getMagicroom();
+        }
+        System.out.println("查找失败！");
+        return 0;
+    }
 }

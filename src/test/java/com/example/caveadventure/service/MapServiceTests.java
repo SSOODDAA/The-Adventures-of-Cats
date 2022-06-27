@@ -47,4 +47,18 @@ public class MapServiceTests {
         }
 
     }
+
+    @Test
+    public void find()
+    {
+        int userid=12;
+        int[] nowRoom=mapService.findNowRoom(userid);
+        System.out.println("当前所处房间:"+nowRoom[0]+","+nowRoom[1]);
+        List<Integer> route=mapService.findRoute(userid);
+        System.out.println("路径:"+route);
+        List<Integer> dead=mapService.findDeadRoom(userid);
+        System.out.println("死房间:"+dead);
+        int magic= mapService.findMagicRoom(userid);
+        System.out.println("魔法房间："+magic);
+    }
 }
