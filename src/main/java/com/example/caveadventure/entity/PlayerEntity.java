@@ -19,6 +19,15 @@ public class PlayerEntity implements Serializable {
     private Integer heart;
     private Integer baglimit;
     private Integer bagweight;
+
+    public Integer getBagweight() {
+        return bagweight;
+    }
+
+    public void setBagweight(Integer bagweight) {
+        this.bagweight = bagweight;
+    }
+
     private Double adventure;
     private List<ProductEntity> product;
     private int endtime;
@@ -84,12 +93,12 @@ public class PlayerEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerEntity that = (PlayerEntity) o;
-        return endtime == that.endtime && Objects.equals(userid, that.userid) && Objects.equals(roleid, that.roleid) && Objects.equals(heart, that.heart) && Objects.equals(baglimit, that.baglimit) && Objects.equals(adventure, that.adventure) && Objects.equals(product, that.product);
+        return endtime == that.endtime && Objects.equals(userid, that.userid) && Objects.equals(roleid, that.roleid) && Objects.equals(heart, that.heart) && Objects.equals(baglimit, that.baglimit) && Objects.equals(bagweight, that.bagweight) && Objects.equals(adventure, that.adventure) && Objects.equals(product, that.product);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userid, roleid, heart, baglimit, adventure, product, endtime);
+        return Objects.hash(userid, roleid, heart, baglimit, bagweight, adventure, product, endtime);
     }
 
     @Override
@@ -99,6 +108,7 @@ public class PlayerEntity implements Serializable {
                 ", roleid=" + roleid +
                 ", heart=" + heart +
                 ", baglimit=" + baglimit +
+                ", bagweight=" + bagweight +
                 ", adventure=" + adventure +
                 ", product=" + product +
                 ", endtime=" + endtime +
