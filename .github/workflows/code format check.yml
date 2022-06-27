@@ -12,9 +12,15 @@ jobs:
         run: git config --global --add safe.directory "*"
         
       - name: Checkout repo
-        uses: actions/checkout@v2
-        with:
-          ref: $
+        uses: |
+           actions/checkout@v2
+           actions/setup-java@v2
+           with:
+
+                    java-version: "11"
+
+                    distribution: "adopt"
+    
  
       - name: Install dotnet-format
         run: dotnet tool install -g dotnet-format
