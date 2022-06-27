@@ -74,8 +74,7 @@ jobs:
                 mysql user: root
               # MYSQL_PASSWORD - specified superuser password which user is power for created database
                 mysql password: 123456
-                  
+                
             - run: mvn test
-    	    # 执行`mvn test`命令
 
 
