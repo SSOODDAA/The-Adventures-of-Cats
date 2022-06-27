@@ -93,5 +93,10 @@ public class MapServiceTests {
         // 查数据库说明血量
     }
 
+    @Test
+    public void handbook(){
+        System.out.println("图鉴内容为：");
+        System.out.println(mapService.handbook());
+    }
 
 }
