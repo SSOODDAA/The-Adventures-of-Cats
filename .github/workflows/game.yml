@@ -5,7 +5,7 @@ name: Game
 on:
     push:
         branches:
-            - game
+            - master
 
     # 这个工作流在push到game分支时触发
 jobs:
