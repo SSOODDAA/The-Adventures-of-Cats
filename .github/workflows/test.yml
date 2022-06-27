@@ -1,0 +1,83 @@
+name: Test
+
+    #工作流的名称
+
+on:
+    push
+
+    # 这个工作流在push到game分支时触发
+jobs:
+    test:
+
+        name: Test
+
+        runs-on: ubuntu-latest
+
+            # 在windows-latest环境中运行
+        steps:
+
+            - uses: actions/checkout@v2
+
+                # 把该仓库checkout到运行环境中
+
+
+
+            - uses: actions/setup-java@v2
+
+              with:
+
+                    java-version: "11"
+
+                    distribution: "adopt"
+
+                # 设置java11环境，附带maven
+            - name: MongoDB in GitHub 
+              # You may pin to the exact commit or the version.
+              # uses: supercharge/mongodb-github-action@e815fd8a9dfede09fd6e6c144f2c9f4875e933df
+
+              uses: supercharge/mongodb-github-action@1.7.0
+              with:
+                   # MongoDB version to use (default "latest")
+                   mongodb-version: 5.0.9
+                   # MongoDB replica set name (no replica set by default)
+   
+                   # MongoDB port to use (default 27017)
+                   mongodb-port: 27017 
+                   # MongoDB db to create (default: none)
+                   mongodb-db: caveadventure
+                   # MongoDB root username (default: none)
+                   mongodb-username: root
+                   # MongoDB root password (default: none)
+                   mongodb-password: 123456
+
+            - name: Setup MySQL
+
+          # You may pin to the exact commit or the version.
+          # uses: mirromutth/mysql-action@de1fba8b3f90ce8db80f663a7043be3cf3231248
+              uses: mirromutth/mysql-action@v1.1
+              with:
+              # The port of host
+                host port: 3306 
+              # The port of container
+                container port: 3306
+              # --character-set-server - The character set of MySQL server
+                character set server: utf8mb4
+              # --collation-server - The character collation of MySQL server
+                collation server: utf8mb4_general_ci
+              # Version of MySQL to use
+                mysql version: 5.7.28
+              # MYSQL_ROOT_PASSWORD - root superuser password
+                mysql root password: 123456
+              # MYSQL_DATABASE - name for the default database that is created
+                mysql database: caveadventure
+              # MYSQL_USER - create the specified user with superuser power for created database
+                mysql user: root
+              # MYSQL_PASSWORD - specified superuser password which user is power for created database
+                mysql password: 123456
+            - run: mvn test
+            
+                
+                
+            
+
+
