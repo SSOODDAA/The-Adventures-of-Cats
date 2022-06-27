@@ -85,7 +85,12 @@ public class MapServiceTests {
 
     @Test
     public void npc(){
+        int userid = 12;
+        List<Integer> randNpc = mapService.randNPC(userid);
+        System.out.println("刷npc的情况为："+randNpc.get(0));
+        System.out.println("当前的血量为："+randNpc.get(1));
 
+        // 查数据库说明血量
     }
 
 
