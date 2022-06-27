@@ -3,7 +3,7 @@ name: Code format check
 on: 
   push:
     branches: 
-      - master
+      - game
 jobs:
   dotnet-format:
     runs-on: windows-latest
