@@ -3,9 +3,7 @@ name: Game
     #工作流的名称
 
 on:
-    push:
-        branches:
-            - game
+    push
 
     # 这个工作流在push到game分支时触发
 jobs:
