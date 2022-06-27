@@ -18,6 +18,7 @@ public class PlayerEntity implements Serializable {
     private Integer roleid;
     private Integer heart;
     private Integer baglimit;
+    private Integer bagweight;
     private Double adventure;
     private List<ProductEntity> product;
     private int endtime;
