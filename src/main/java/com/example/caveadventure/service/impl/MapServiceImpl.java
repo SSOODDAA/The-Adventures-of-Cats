@@ -24,6 +24,10 @@ public class MapServiceImpl implements MapService {
     /* 玩家操作 */
     @Autowired
     public PlayerReposity playerReposity;
+    /* 查物品 */
+    @Autowired
+    public ProductMapper productMapper;
+
 
     /**
      * 初始化游戏地图
@@ -288,13 +292,18 @@ public class MapServiceImpl implements MapService {
     }
 
 
-
+    /**
+     * 点击图鉴查询所有物品与NPC信息
+     * @return 所有信息
+     */
     public List<ProductEntity> handbook(){
-        ProductMapper productMapper;
+        List<ProductEntity> book = new ArrayList<>();
 
+        // 查询所有物品
         for(int i=1; i<=12; i++){
-
+            book.add(productMapper.findById(i));
         }
+        return book;
     }
 
 }

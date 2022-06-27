@@ -1,10 +1,12 @@
 package com.example.caveadventure.controller;
 
 import com.example.caveadventure.entity.PlayerEntity;
+import com.example.caveadventure.entity.ProductEntity;
 import com.example.caveadventure.service.MapService;
 import com.example.caveadventure.service.ex.ServiceException;
 import com.example.caveadventure.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,13 +41,14 @@ public class MapController extends BaseController{
     }
 
     /**
-     * 人物移动上下左右事件与刷NPC
+     * 人物移动上下左右事件与刷NPC。
+     * 需要对上下左右移动有编号，传入编号。如这里，上下左右，1234
      * @param userid 用户id
      * @param action 移动方向
      * @return 移动后坐标
      */
     @PutMapping("/move")
-    public JsonResult<List<Integer>> move(Integer userid, Integer action){    // 需要对上下左右移动有编号，传入编号。如这里，上下左右，1234
+    public JsonResult<List<Integer>> move(Integer userid, Integer action){
         // 更改当前位置并刷npc
         mapService.move(userid, action);
         List<Integer> randNpc = mapService.randNPC(userid);
@@ -64,7 +67,14 @@ public class MapController extends BaseController{
         return new JsonResult<List<Integer>>(OK, res);
     }
 
-
+    /**
+     * 查看图鉴
+     * @return
+     */
+    @GetMapping("/handbook")
+    public JsonResult<List<ProductEntity>> handbook(){
+        return new JsonResult<>(OK, mapService.handbook());
+    }
 
 
 }
