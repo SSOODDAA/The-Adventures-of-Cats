@@ -7,6 +7,7 @@ import com.example.caveadventure.entity.MapEntity;
 import com.example.caveadventure.entity.PlayerEntity;
 import com.example.caveadventure.entity.ProductEntity;
 import com.example.caveadventure.service.MapService;
+import com.example.caveadventure.service.ex.ServiceException;
 import com.example.caveadventure.service.ex.UpdateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,16 +85,6 @@ public class MapServiceImpl implements MapService {
                 resMap[index/5][index%5] = 1;
             }
         }
-
-        ///////测试打印
-        for (int i=0; i<5;i++){
-            for (int j=0;j<5;j++){
-                System.out.print(resMap[i][j]);
-                System.out.print(" ");
-            }
-            System.out.print("\n");
-        }
-
 
         int[] finalMap = new int[25];
         for (int i=0; i<5; i++){
@@ -261,15 +252,27 @@ public class MapServiceImpl implements MapService {
         }else if (action == 4){
             nowroomy += 1;  // 右
         }
-        // 获取死房间
+        // 获取死房间与魔法房间
         List<Integer> route = oldMap.getRoute();
         List<Integer> deads = oldMap.getDeadroom();
+        int magicRoom = oldMap.getMagicroom();
         int curPos = 5*nowroomx + nowroomy;
         // 检测合法性
         if (nowroomx < 0 || nowroomx > 4 || nowroomy < 0 || nowroomy > 4 || deads.contains(curPos)){
             nowroomx = oldMap.getNowroomx();
             nowroomy = oldMap.getNowroomy();
         }else {
+            // 魔法房间随机刷位置
+            if (curPos == magicRoom){
+                Random rand = new Random();
+                int magicPos = rand.nextInt(25);
+                while(deads.contains(magicPos)){
+                    magicPos = rand.nextInt(25);
+                }
+                nowroomx = magicPos / 5;
+                nowroomy = magicPos % 5;
+            }
+
             // 更新的参数：路径，把老点加进去
             int pos = 5*oldMap.getNowroomx()+ oldMap.getNowroomy();
             if(route == null){
@@ -289,6 +292,7 @@ public class MapServiceImpl implements MapService {
         mapEntity.setDeadroom(oldMap.getDeadroom());
         mapReposity.save(mapEntity);
     }
+
 
     /**
      * 刷NPC事件
@@ -316,6 +320,93 @@ public class MapServiceImpl implements MapService {
         res.add(npc);
         res.add(player.getHeart());
         return res;
+    }
+
+
+    /**
+     * 查看房间物品
+     * @param userid 用户id
+     * @return 当前房间物品信息
+     */
+    public List<ProductEntity> look(Integer userid){
+        // 这里将adventure视为生成物品的数量相关
+        PlayerEntity player = playerReposity.findByUserid(userid);
+        double num = player.getAdventure() * 5;
+
+        // 生成物品
+        List<ProductEntity> res = new ArrayList<>();
+        Random rand = new Random();
+        for (int i=1; i<=num; i++){
+            // 取高斯分布的右半侧，递减
+           double productId = rand.nextGaussian() * 10;
+           int index = Integer.parseInt(Double.toString(productId));
+           ProductEntity productEntity = productMapper.findById(index);
+           res.add(productEntity);
+        }
+
+        return res;
+    }
+
+    /**
+     * 从房间拿物品
+     * @param userid 用户id
+     * @param index 被拿物品在物品栏中的序号
+     * @return 更新后的背包（即物品栏）
+     */
+    public List<ProductEntity> take(Integer userid, List<Integer> index, List<ProductEntity> products){
+        // 获取角色信息
+        PlayerEntity player = playerReposity.findByUserid(userid);
+        List<ProductEntity> bag = player.getProduct();
+        int newWeight = player.getBagweight();
+
+        // 注意这里有个次序问题！！！
+        for (int i : index){
+            ProductEntity curProduct = products.get(i);
+            int curProductWeight = curProduct.getWeight();
+            if (newWeight - curProductWeight >= 0){
+                bag.add(curProduct);
+                newWeight -= curProductWeight;
+            }else {
+                throw new ServiceException("加入背包物品过多已超过背包容量！");
+            }
+        }
+        // 更新存入数据库
+        player.setBagweight(newWeight);
+        player.setProduct(bag);
+
+        return bag;
+    }
+
+    /**
+     * 丢弃物品栏中选中的物品
+     * @param userid 用户id
+     * @param index 选中的物品
+     * @return 丢弃完毕后物品栏信息
+     */
+    public List<ProductEntity> drop(Integer userid, List<Integer> index){
+        // 获取角色信息
+        PlayerEntity player = playerReposity.findByUserid(userid);
+        List<ProductEntity> bag = player.getProduct();
+        int newWeight = player.getBagweight();
+        // 删除选中的物品
+        for (int i : index){
+            newWeight -= bag.get(i).getWeight();
+            bag.remove(i);
+        }
+        // 更新存入数据库
+        player.setBagweight(newWeight);
+        player.setProduct(bag);
+
+        return bag;
+    }
+
+    /**
+     * 返回背包当前容量
+     * @param userid 用户id
+     * @return 背包当前容量
+     */
+    public int items(Integer userid){
+        return playerReposity.findByUserid(userid).getBagweight();
     }
 
 

@@ -34,6 +34,15 @@ public interface MapService {
     /* 刷物品 */
    // List<ProductEntity> randProduct(Integer userid);
 
+    /* 人物行为动作 */
+    /* 查看当前房间的物品信息 */
+    List<ProductEntity> look(Integer userid);
+    /* 从物品栏中丢弃物品 */
+    List<ProductEntity> drop(Integer userid, List<Integer> index);
+    /* 从房间拿物品 */
+    List<ProductEntity> take(Integer userid, List<Integer> index, List<ProductEntity> products);
+    /* 返回背包当前容量 */
+    int items(Integer userid);
 
     /* 点击图鉴事件 */
     List<ProductEntity> handbook();

@@ -33,19 +33,11 @@ public class MapController extends BaseController{
         int[]res = mapService.init(userid);
 
         return new JsonResult<int[]>(OK, res);
-
-
-        // 首先查询石头，然后查询魔法房间
-//        List<Integer> res = mapService.findDeadRoom(userid);
-//        int magicRoom = mapService.findMagicRoom(userid);
-//        res.add(magicRoom);
-//
-//        return new JsonResult<List<Integer>>(OK, res);
     }
 
     /**
      * 人物移动上下左右事件与刷NPC
-     * 需要对上下左右移动有编号，传入编号。如这里，上下左右，1234
+     * 需要对上下左右移动有编号，传入编号。如这里，上下左右->1234
      * @param userid 用户id
      * @param action 移动方向
      * @return 移动后坐标
@@ -77,6 +69,56 @@ public class MapController extends BaseController{
     @GetMapping("/handbook")
     public JsonResult<List<ProductEntity>> handbook(){
         return new JsonResult<>(OK, mapService.handbook());
+    }
+
+
+    /**
+     * 查看当前房间随机生成的物品信息
+     * @param userid 用户id
+     * @return 物品信息
+     */
+    @RequestMapping("/look")
+    public JsonResult<List<ProductEntity>> look(Integer userid){
+        List<ProductEntity> products = mapService.look(userid);
+
+        return new JsonResult<List<ProductEntity>>(OK, products);
+    }
+
+    /**
+     * 丢弃物品栏物品
+     * @param userid 用户id
+     * @param index 选中的丢弃品在物品栏中的序号id
+     * @return 更新后的物品栏
+     */
+    @PutMapping("/drop")
+    public JsonResult<List<ProductEntity>> drop(Integer userid, List<Integer> index){
+        List<ProductEntity> bag = mapService.drop(userid, index);
+
+        return new JsonResult<List<ProductEntity>>(OK, bag);
+    }
+
+    /**
+     * 从当前房间拿物品
+     * @param userid 用户id
+     * @param index 选中的要拿的物品的序号id
+     * @return 拿完物品后的背包
+     */
+    @PutMapping("/take")
+    public JsonResult<List<ProductEntity>> take(Integer userid, List<Integer> index, List<ProductEntity> products){
+        List<ProductEntity> bag = mapService.take(userid, index, products);
+
+        return new JsonResult<List<ProductEntity>>(OK, bag);
+    }
+
+    /**
+     * 查询背包容量
+     * @param userid 用户id
+     * @return 当前背包容量
+     */
+    @GetMapping("/items")
+    public JsonResult<Integer> items(Integer userid){
+        int num = mapService.items(userid);
+        return new JsonResult<Integer>(OK, num);
     }
 
 

@@ -26,28 +26,7 @@ public class MapServiceTests {
     public void initMap(){
         int userid = 12;
         int[] res = mapService.init(userid);
-//        int[][] map = new int[5][5];
-//
-//        //生成地图
-//        for (int i=0; i<res.size(); i++){
-//            int index = res.get(i);
-//            if(i == res.size()-1){
-//                // 魔法房间为list最后一个元素
-//                map[index/5][index%5] = 2;
-//            }
-//            else {
-//                map[index/5][index%5] = 1;
-//            }
-//        }
 
-        // 打印地图
-//        for (int i=0; i<5; i++){
-//            for(int j=0; j<5; j++){
-//                System.out.print(map[i][j]);
-//                System.out.print(" ");
-//            }
-//            System.out.print("\n");
-//        }
         for (int i=0; i<res.length;i++){
             System.out.print(res[i]);
             System.out.print(" ");
