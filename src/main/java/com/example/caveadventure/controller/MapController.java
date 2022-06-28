@@ -7,6 +7,7 @@ import com.example.caveadventure.service.ex.ServiceException;
 import com.example.caveadventure.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,7 @@ public class MapController extends BaseController{
      * @param userid 用户id
      * @return 死房间与魔法房间的索引
      */
-    @RequestMapping("/")    // 考虑可以修改为Post请求
+    @PostMapping
     public JsonResult<int[]> initGame(Integer userid){
         int[]res = mapService.init(userid);
 
@@ -59,14 +60,12 @@ public class MapController extends BaseController{
         if (randNpc.get(1) == 0){
             throw new ServiceException("角色去世了！先这样写！");       // 去世了可能还需要修改
         }
-
         // 依次返回，刷出的npc情况，当前位置的序号，目前的血量
         int[] now = mapService.findNowRoom(userid);
         List<Integer> res = new ArrayList<>();
         res.add(randNpc.get(0));
         res.add(5*now[0]+now[1]);
         res.add(randNpc.get(1));
-
         return new JsonResult<List<Integer>>(OK, res);
     }
 
