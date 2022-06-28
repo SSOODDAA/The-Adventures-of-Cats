@@ -29,15 +29,18 @@ public class MapController extends BaseController{
      * @return 死房间与魔法房间的索引
      */
     @RequestMapping("/")    // 考虑可以修改为Post请求
-    public JsonResult<List<Integer>> initGame(Integer userid){
-        mapService.init(userid);
+    public JsonResult<int[]> initGame(Integer userid){
+        int[]res = mapService.init(userid);
+
+        return new JsonResult<int[]>(OK, res);
+
 
         // 首先查询石头，然后查询魔法房间
-        List<Integer> res = mapService.findDeadRoom(userid);
-        int magicRoom = mapService.findMagicRoom(userid);
-        res.add(magicRoom);
-
-        return new JsonResult<List<Integer>>(OK, res);
+//        List<Integer> res = mapService.findDeadRoom(userid);
+//        int magicRoom = mapService.findMagicRoom(userid);
+//        res.add(magicRoom);
+//
+//        return new JsonResult<List<Integer>>(OK, res);
     }
 
     /**

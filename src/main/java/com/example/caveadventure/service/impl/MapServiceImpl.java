@@ -70,7 +70,7 @@ public class MapServiceImpl implements MapService {
         mapEntity.setNowroomx(0);
         mapEntity.setNowroomy(0);
         mapEntity.setRoute(null);
-        mapReposity.insert(mapEntity);
+        mapReposity.save(mapEntity);   // 更改
 
         // 生成返回值
         int[][] resMap = new int[5][5];
