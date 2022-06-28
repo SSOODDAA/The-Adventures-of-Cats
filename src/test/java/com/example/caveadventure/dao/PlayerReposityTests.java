@@ -68,7 +68,7 @@ public class PlayerReposityTests {
     public void delete()
     {
         int flag;
-        flag=playerReposity.deleteByUserid(3);
+        flag=playerReposity.deleteByUserid(6);
         System.out.println(flag);
     }
 

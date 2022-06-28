@@ -14,7 +14,7 @@ export default {
     MapCell
   },
   setup(){
-    const cells=ref([0,0,0,1,0,1,1,1,1,1,2,2,0,2,2,3,0,3,3,3,4,4,4,4,4,5,5,5,5,5]);
+    const cells=ref([0,0,0,1,0,1,1,1,1,1,2,2,0,2,2,3,0,3,3,3,4,4,4,4,4]);
     return {
       cells
     }
@@ -32,7 +32,7 @@ export default {
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  width: 500px;
-  height: 500px;
+  width: 400px;
+  height: 400px;
 }
 </style>

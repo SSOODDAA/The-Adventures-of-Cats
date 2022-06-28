@@ -68,23 +68,22 @@ name: "ChooseRole",
             }
             else{
                let str = sessionStorage.getItem("user")||"{}"
-                this.form = JSON.parse(str)
-                console.log(this.form.id)
+               let form = JSON.parse(str)
+                console.log(form.userid)
                 window.sessionStorage.setItem('roleid', JSON.stringify(this.isClick))//将roleid存入session
 
                 /*向后端传递选角和用户id信息*/
                 var param = new FormData()
-                param.append('userid', this.form.username)//用户账号
+                param.append('userid', form.userid)//用户账号
                 param.append('roleid',this.isClick)//选角信息
                 var url = "/role"//'获取数据的后台地址'
-                // request.post("/users")
                 request.post(url, param)
-                .then(({ data: res }) => {
+                .then(res => {
+                  console.log(res)
                     if(res.state===200){
                         console.log("success")
-                        this.$router.push('/maingame')/*跳转到游戏界面*/
+                        this.$router.push("/maingame")/*跳转到游戏界面*/
                         }
-
                 }).catch(() => {})
             }
         }
