@@ -262,27 +262,23 @@ public class MapServiceImpl implements MapService {
             nowroomy += 1;  // 右
         }
         // 获取死房间
+        List<Integer> route = oldMap.getRoute();
         List<Integer> deads = oldMap.getDeadroom();
         int curPos = 5*nowroomx + nowroomy;
         // 检测合法性
         if (nowroomx < 0 || nowroomx > 4 || nowroomy < 0 || nowroomy > 4 || deads.contains(curPos)){
-            return;
+            nowroomx = oldMap.getNowroomx();
+            nowroomy = oldMap.getNowroomy();
+        }else {
+            // 更新的参数：路径，把老点加进去
+            int pos = 5*oldMap.getNowroomx()+ oldMap.getNowroomy();
+            if(route == null){
+                route = new ArrayList<Integer>();
+            }
+            else {
+                route.add(pos);
+            }
         }
-
-        // 更新的参数：路径，把老点加进去
-        List<Integer> route = oldMap.getRoute();
-        int pos = 5*oldMap.getNowroomx()+ oldMap.getNowroomy();
-        if(route == null){
-            route = new ArrayList<Integer>();
-        }
-        else {
-            route.add(pos);
-        }
-
-        // 更新的参数：血量
-        /**
-         * 这里需要后期添加回退扣血
-         */
 
         // 存储更新后的值
         mapEntity.setUserid(userid);
