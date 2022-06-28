@@ -23,7 +23,7 @@ public class PlayerServiceTests {
     {
         int userid=8;
         int heart=playerService.findHeart(userid);
-        System.out.println("生命值:"+heart);
+        System.out.println("生命值"+heart);
         int baglimit=playerService.findBagWeight(userid);
         System.out.println("背包上限:"+baglimit);
         int bagweight=playerService.findBagWeight(userid);
