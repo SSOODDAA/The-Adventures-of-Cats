@@ -19,15 +19,6 @@ public class PlayerEntity implements Serializable {
     private Integer heart;
     private Integer baglimit;
     private Integer bagweight;
-
-    public Integer getBagweight() {
-        return bagweight;
-    }
-
-    public void setBagweight(Integer bagweight) {
-        this.bagweight = bagweight;
-    }
-
     private Double adventure;
     private List<ProductEntity> product;
     private int endtime;
@@ -86,6 +77,14 @@ public class PlayerEntity implements Serializable {
 
     public void setEndtime(int endtime) {
         this.endtime = endtime;
+    }
+
+    public Integer getBagweight() {
+        return bagweight;
+    }
+
+    public void setBagweight(Integer bagweight) {
+        this.bagweight = bagweight;
     }
 
     @Override
