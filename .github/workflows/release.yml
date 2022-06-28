@@ -63,3 +63,11 @@ jobs:
         mvn -B package --file pom.xml
         
     - run: mkdir staging && cp target/*.jar staging
+    
+    - name: publish
+      uses: s0/git-publish-subdir-action@master
+      env:
+        REPO: wutcst/sept2-2022-g-o-t
+        BRANCH: publish
+        FOLDER: staging        
+  
