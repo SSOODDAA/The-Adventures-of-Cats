@@ -17,8 +17,9 @@ public class PlayerReposityTests {
     public void insert()
     {
         PlayerEntity playerEntity=new PlayerEntity();
-        playerEntity.setUserid(3);
+        playerEntity.setUserid(8);
         playerEntity.setRoleid(1);
+        playerEntity.setBagweight(0);
         playerEntity.setAdventure(1.00);
         playerEntity.setEndtime(300);
         playerEntity.setBaglimit(100);
@@ -35,7 +36,7 @@ public class PlayerReposityTests {
     @Test
     public void find()
     {
-        PlayerEntity result=playerReposity.findByUserid(1);
+        PlayerEntity result=playerReposity.findByUserid(7);
         if(result!=null){
             System.out.println(result.toString());
         } else{
@@ -48,6 +49,7 @@ public class PlayerReposityTests {
     {
         PlayerEntity playerEntity=new PlayerEntity();
         playerEntity.setUserid(3);
+        playerEntity.setBagweight(0);
         playerEntity.setRoleid(1);
         playerEntity.setAdventure(1.00);
         playerEntity.setEndtime(300);
