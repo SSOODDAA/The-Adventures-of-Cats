@@ -37,6 +37,8 @@ public class RoleServiceImpl implements RoleService {
         player.setRoleid(role.getId());
         player.setAdventure(role.getAdventure());
         player.setBaglimit(role.getBaglimit());
+        // 初始容量设置为背包上限
+        player.setBagweight(role.getBaglimit());
         player.setHeart(role.getHeart());
         // player.setProduct(new ArrayList<ProductEntity>());
         // 设置物品栏默认为空

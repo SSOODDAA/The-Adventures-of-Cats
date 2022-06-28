@@ -7,7 +7,7 @@ import java.util.List;
 public interface MapService {
 
     /* 初始化地图 */
-    List<Integer> init(Integer userid);
+    int[] init(Integer userid);
     /* 生成若干随机数 */
     List<Integer> randSeveralNums(int len, int start, int end, List<Integer> sub);
     /* 判断图连通性 */
@@ -31,6 +31,9 @@ public interface MapService {
     /* 随机生成事件 */
     /* 刷NPC */
     List<Integer> randNPC(Integer userid);
+    /* 刷物品 */
+   // List<ProductEntity> randProduct(Integer userid);
+
 
     /* 点击图鉴事件 */
     List<ProductEntity> handbook();

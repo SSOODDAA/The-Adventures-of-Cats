@@ -41,7 +41,7 @@ public class MapController extends BaseController{
     }
 
     /**
-     * 人物移动上下左右事件与刷NPC。
+     * 人物移动上下左右事件与刷NPC
      * 需要对上下左右移动有编号，传入编号。如这里，上下左右，1234
      * @param userid 用户id
      * @param action 移动方向
@@ -69,7 +69,7 @@ public class MapController extends BaseController{
 
     /**
      * 查看图鉴
-     * @return
+     * @return 所有物品信息
      */
     @GetMapping("/handbook")
     public JsonResult<List<ProductEntity>> handbook(){

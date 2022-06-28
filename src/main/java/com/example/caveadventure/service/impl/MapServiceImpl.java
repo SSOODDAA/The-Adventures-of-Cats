@@ -34,7 +34,7 @@ public class MapServiceImpl implements MapService {
      * @param userid 用户id
      * @return 地图石头坐标
      */
-    public List<Integer> init(Integer userid){
+    public int[] init(Integer userid){
         // 初始化数组地图，0表示房间
         int[][] map = new int[5][5];
         for(int i=0; i<5; i++){
@@ -55,7 +55,6 @@ public class MapServiceImpl implements MapService {
         // 2代表魔法房间
         List<Integer> magic = randSeveralNums(1, 0, 24, stones);
         int magicRoom = magic.get(magic.size()-1);
-
         map[magicRoom/5][magicRoom%5] = 2;
 
         // 依次返回石头与魔法房间的序号
@@ -72,7 +71,36 @@ public class MapServiceImpl implements MapService {
         mapEntity.setNowroomy(0);
         mapEntity.setRoute(null);
         mapReposity.insert(mapEntity);
-        return res;
+
+        // 生成返回值
+        int[][] resMap = new int[5][5];
+        for (int i=0; i<res.size(); i++){
+            int index = res.get(i);
+            if(i == res.size()-1){
+                // 魔法房间为list最后一个元素
+                resMap[index/5][index%5] = 2;
+            }
+            else {
+                resMap[index/5][index%5] = 1;
+            }
+        }
+
+        ///////测试打印
+        for (int i=0; i<5;i++){
+            for (int j=0;j<5;j++){
+                System.out.print(resMap[i][j]);
+                System.out.print(" ");
+            }
+            System.out.print("\n");
+        }
+
+
+        int[] finalMap = new int[25];
+        for (int i=0; i<5; i++){
+            System.arraycopy(resMap[i], 0, finalMap, 5 * i + 0, 5);
+        }
+
+        return finalMap;
     }
 
 
@@ -225,16 +253,19 @@ public class MapServiceImpl implements MapService {
 
         // 更新的参数：当前位置
         if (action == 1){
-            nowroomy -= 1;  // 上
+            nowroomx -= 1;  // 上
         }else if (action == 2){
-            nowroomy += 1;  // 下
+            nowroomx += 1;  // 下
         }else if (action == 3){
-            nowroomx -= 1;  // 左
-        }else {
-            nowroomx += 1;  // 右
+            nowroomy -= 1;  // 左
+        }else if (action == 4){
+            nowroomy += 1;  // 右
         }
+        // 获取死房间
+        List<Integer> deads = oldMap.getDeadroom();
+        int curPos = 5*nowroomx + nowroomy;
         // 检测合法性
-        if (nowroomx < 0 || nowroomx > 4 || nowroomy < 0 || nowroomy > 4){
+        if (nowroomx < 0 || nowroomx > 4 || nowroomy < 0 || nowroomy > 4 || deads.contains(curPos)){
             return;
         }
 
@@ -305,5 +336,7 @@ public class MapServiceImpl implements MapService {
         }
         return book;
     }
+
+
 
 }
