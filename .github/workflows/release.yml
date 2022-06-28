@@ -71,4 +71,5 @@ jobs:
         BRANCH: publish
         FOLDER: staging   
         SSH_PRIVATE_KEY: ${{ SECRETS.PUBLISH }}
+        SQUASH_HISTORY: FALSE
   
