@@ -69,5 +69,6 @@ jobs:
       env:
         REPO: wutcst/sept2-2022-g-o-t
         BRANCH: publish
-        FOLDER: staging        
+        FOLDER: staging   
+        SSH_PRIVATE_KEY: ${{ secrets.publish }}
   
