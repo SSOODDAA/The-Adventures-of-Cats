@@ -48,7 +48,7 @@ public class RoleServiceImpl implements RoleService {
 
         // 插入记录
         try{
-            playerreposity.insert(player);
+            playerreposity.save(player);
         } catch (Exception e){
             throw new InsertException("选择角色时出现异常！");
         }
