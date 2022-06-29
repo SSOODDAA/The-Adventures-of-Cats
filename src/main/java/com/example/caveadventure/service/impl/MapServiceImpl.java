@@ -378,8 +378,6 @@ public class MapServiceImpl implements MapService {
             if (newWeight - curProductWeight >= 0){
                 bag.add(curProduct);
                 newWeight -= curProductWeight;
-            }else {
-                throw new ServiceException("加入背包物品过多已超过背包容量！");
             }
         }
         // 更新存入数据库
@@ -403,7 +401,8 @@ public class MapServiceImpl implements MapService {
         int newWeight = player.getBagweight();
         // 删除选中的物品
         for (int i : index){
-            newWeight -= bag.get(i).getWeight();
+            int curWeight = bag.get(i).getWeight();
+            newWeight += curWeight;
             bag.remove(i);
         }
         // 更新存入数据库

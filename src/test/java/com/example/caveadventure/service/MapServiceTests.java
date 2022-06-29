@@ -28,13 +28,13 @@ public class MapServiceTests {
      */
     @Test
     public void initMap(){
-        int userid = 12;
+        int userid = 14;
         int[] res = mapService.init(userid);
 
         for (int i=0; i<res.length;i++){
             System.out.print(res[i]);
             System.out.print(" ");
-            if (i % 5 == 0){
+            if (i % 5 == 0 && i!=0){
                 System.out.print("\n");
             }
         }
@@ -100,7 +100,7 @@ public class MapServiceTests {
      */
     @Test
     public void look(){
-        int userid = 12;
+        int userid = 5;
         List<ProductEntity> products = mapService.look(userid);
 
         System.out.println("随机刷出的物品为：");
@@ -112,7 +112,7 @@ public class MapServiceTests {
      */
     @Test
     public void take(){
-        int userid = 12;
+        int userid = 5;
         // 查询老背包状态
         List<ProductEntity> oldBag = playerService.findProduct(userid);
         System.out.println("拿东西前老背包内容为：");
@@ -135,7 +135,7 @@ public class MapServiceTests {
      */
     @Test
     public void drop(){
-        int userid = 12;
+        int userid = 5;
         // 查询老背包状态
         List<ProductEntity> oldBag = playerService.findProduct(userid);
         System.out.println("老背包内容为：");
@@ -154,7 +154,7 @@ public class MapServiceTests {
      */
     @Test
     public void items(){
-        int userid = 12;
+        int userid = 5;
         System.out.println("背包容量为：");
         System.out.println(mapService.items(userid));
     }

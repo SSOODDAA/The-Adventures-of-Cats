@@ -72,7 +72,7 @@ public class UserServiceTests {
             UserEntity user = userservice.findByUserid(9);
             System.out.println("更新后密码为：" + user.getPwd());
         }catch (ServiceException e){
-            System.out.println("修改密码失败！");
+            System.out.println("修改密码失败!");
             System.out.println(e.getMessage());
         }
     }
