@@ -26,7 +26,8 @@ export default {
             this.$router.push('/person')
         },
         login(){
-            this.$router.push('/login')
+          sessionStorage.clear()
+          this.$router.push('/login')
         }
 
     }

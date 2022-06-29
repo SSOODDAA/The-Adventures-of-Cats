@@ -235,6 +235,9 @@ public class MapServiceImpl implements MapService {
      * @param action 具体移动操作
      */
     public void move(Integer userid, Integer action){
+        // 查找玩家，在后边可以让它回退扣血，更新信息
+        PlayerEntity player = playerReposity.findByUserid(userid);
+
         // 查找老地图，更新为新地图
         MapEntity oldMap = mapReposity.findByUserid(userid);
         MapEntity mapEntity = new MapEntity();
@@ -279,6 +282,12 @@ public class MapServiceImpl implements MapService {
                 route = new ArrayList<Integer>();
             }
             else {
+                // 若是回到上一步位置，则需要扣血 ---  如果没有back这个按钮那么魔法房间是无法保证能够回退的---------   ！！注意！！
+                int lastRoom = route.get(route.size() - 1);
+                if(nowroomx == lastRoom/5 && nowroomy == lastRoom%5){
+                    player.setHeart(player.getHeart() - 5);
+                }
+
                 route.add(pos);
             }
         }
@@ -291,6 +300,9 @@ public class MapServiceImpl implements MapService {
         mapEntity.setMagicroom(oldMap.getMagicroom());
         mapEntity.setDeadroom(oldMap.getDeadroom());
         mapReposity.save(mapEntity);
+
+        // 更新玩家信息
+        playerReposity.save(player);
     }
 
 
@@ -338,8 +350,8 @@ public class MapServiceImpl implements MapService {
         Random rand = new Random();
         for (int i=1; i<=num; i++){
             // 取高斯分布的右半侧，递减
-           double productId = rand.nextGaussian() * 10;
-           int index = Integer.parseInt(Double.toString(productId));
+           double productId = Math.abs(rand.nextGaussian() * 5);
+           int index = (int) productId;
            ProductEntity productEntity = productMapper.findById(index);
            res.add(productEntity);
         }
@@ -366,13 +378,12 @@ public class MapServiceImpl implements MapService {
             if (newWeight - curProductWeight >= 0){
                 bag.add(curProduct);
                 newWeight -= curProductWeight;
-            }else {
-                throw new ServiceException("加入背包物品过多已超过背包容量！");
             }
         }
         // 更新存入数据库
         player.setBagweight(newWeight);
         player.setProduct(bag);
+        playerReposity.save(player);
 
         return bag;
     }
@@ -390,12 +401,14 @@ public class MapServiceImpl implements MapService {
         int newWeight = player.getBagweight();
         // 删除选中的物品
         for (int i : index){
-            newWeight -= bag.get(i).getWeight();
+            int curWeight = bag.get(i).getWeight();
+            newWeight += curWeight;
             bag.remove(i);
         }
         // 更新存入数据库
         player.setBagweight(newWeight);
         player.setProduct(bag);
+        playerReposity.save(player);
 
         return bag;
     }
@@ -411,6 +424,38 @@ public class MapServiceImpl implements MapService {
 
 
     /**
+     * 查询角色当前状态
+     * @param userid 用户id
+     * @return list(血量,背包容量,分数)
+     */
+    public List<Integer> queryStates(Integer userid){
+        PlayerEntity player = playerReposity.findByUserid(userid);
+        // 获取血量
+        int heart = player.getHeart();
+        // 获取背包容量
+        int bagWeight = player.getBagweight();
+        // 获取分数
+        int score = 0;
+        if (player.getProduct() != null){
+            // 直接拿稀有度折算为分数
+            for (ProductEntity p :  player.getProduct()){
+                score += p.getRare();
+            }
+            // 随便配的系数，后边可以改 >_<
+            score += player.getHeart() * 2;
+        }
+        // 返回
+        List<Integer> res = new ArrayList<>();
+        res.add(heart);
+        res.add(bagWeight);
+        res.add(score);
+
+        return res;
+    }
+
+
+
+    /**
      * 点击图鉴查询所有物品与NPC信息
      * @return 所有信息
      */
@@ -423,6 +468,8 @@ public class MapServiceImpl implements MapService {
         }
         return book;
     }
+
+
 
 
 
