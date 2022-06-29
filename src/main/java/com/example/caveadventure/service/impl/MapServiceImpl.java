@@ -235,6 +235,9 @@ public class MapServiceImpl implements MapService {
      * @param action 具体移动操作
      */
     public void move(Integer userid, Integer action){
+        // 查找玩家，在后边可以让它回退扣血，更新信息
+        PlayerEntity player = playerReposity.findByUserid(userid);
+
         // 查找老地图，更新为新地图
         MapEntity oldMap = mapReposity.findByUserid(userid);
         MapEntity mapEntity = new MapEntity();
@@ -279,6 +282,12 @@ public class MapServiceImpl implements MapService {
                 route = new ArrayList<Integer>();
             }
             else {
+                // 若是回到上一步位置，则需要扣血 ---  如果没有back这个按钮那么魔法房间是无法保证能够回退的---------   ！！注意！！
+                int lastRoom = route.get(route.size() - 1);
+                if(nowroomx == lastRoom/5 && nowroomy == lastRoom%5){
+                    player.setHeart(player.getHeart() - 5);
+                }
+
                 route.add(pos);
             }
         }
@@ -291,6 +300,9 @@ public class MapServiceImpl implements MapService {
         mapEntity.setMagicroom(oldMap.getMagicroom());
         mapEntity.setDeadroom(oldMap.getDeadroom());
         mapReposity.save(mapEntity);
+
+        // 更新玩家信息
+        playerReposity.save(player);
     }
 
 
@@ -373,6 +385,7 @@ public class MapServiceImpl implements MapService {
         // 更新存入数据库
         player.setBagweight(newWeight);
         player.setProduct(bag);
+        playerReposity.save(player);
 
         return bag;
     }
@@ -396,6 +409,7 @@ public class MapServiceImpl implements MapService {
         // 更新存入数据库
         player.setBagweight(newWeight);
         player.setProduct(bag);
+        playerReposity.save(player);
 
         return bag;
     }

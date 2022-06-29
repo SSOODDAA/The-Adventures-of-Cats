@@ -1,5 +1,6 @@
 package com.example.caveadventure.service;
 
+import com.example.caveadventure.entity.ProductEntity;
 import com.example.caveadventure.service.impl.MapServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +20,8 @@ import java.util.List;
 public class MapServiceTests {
     @Autowired
     public MapService mapService;
+    @Autowired
+    public PlayerService playerService;
 
     /**
      * 测试初始化地图功能
@@ -69,6 +73,9 @@ public class MapServiceTests {
         System.out.println("向下移动后路径："+route);
     }
 
+    /**
+     * 刷出npc测试
+     */
     @Test
     public void npc(){
         int userid = 12;
@@ -79,10 +86,78 @@ public class MapServiceTests {
         // 查数据库说明血量
     }
 
+    /**
+     * 查看图鉴测试
+     */
     @Test
     public void handbook(){
         System.out.println("图鉴内容为：");
         System.out.println(mapService.handbook());
     }
+
+    /**
+     * 查看当前房间刷出物品信息测试
+     */
+    @Test
+    public void look(){
+        int userid = 12;
+        List<ProductEntity> products = mapService.look(userid);
+
+        System.out.println("随机刷出的物品为：");
+        System.out.println(products);
+    }
+
+    /**
+     * 拿物品测试
+     */
+    @Test
+    public void take(){
+        int userid = 12;
+        // 查询老背包状态
+        List<ProductEntity> oldBag = playerService.findProduct(userid);
+        System.out.println("拿东西前老背包内容为：");
+        System.out.println(oldBag);
+        // 随机刷出物品
+        List<ProductEntity> products = mapService.look(userid);
+        System.out.println("随机刷出的物品为：");
+        System.out.println(products);
+        // 测试，选择第一个物品
+        List<Integer> choice = new ArrayList<>();
+        choice.add(0);
+        // 返回拿完物品后的背包
+        mapService.take(userid, choice, products);
+        System.out.println("拿东西后新背包内容为：");
+        System.out.println(playerService.findProduct(userid));
+    }
+
+    /**
+     * 丢弃物品测试
+     */
+    @Test
+    public void drop(){
+        int userid = 12;
+        // 查询老背包状态
+        List<ProductEntity> oldBag = playerService.findProduct(userid);
+        System.out.println("老背包内容为：");
+        System.out.println(oldBag);
+        // 测试，丢掉第一个物品
+        List<Integer> choice = new ArrayList<>();
+        choice.add(0);
+        // 返回拿完物品后的背包
+        mapService.drop(userid, choice);
+        System.out.println("新背包内容为：");
+        System.out.println(playerService.findProduct(userid));
+    }
+
+    /**
+     * 背包容量测试
+     */
+    @Test
+    public void items(){
+        int userid = 12;
+        System.out.println("背包容量为：");
+        System.out.println(mapService.items(userid));
+    }
+
 
 }
