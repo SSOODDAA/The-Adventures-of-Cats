@@ -159,5 +159,14 @@ public class MapServiceTests {
         System.out.println(mapService.items(userid));
     }
 
-
+    /**
+     * 角色状态测试
+     */
+    @Test
+    public void queryStates(){
+        int userid = 12;
+        List<Integer> states = mapService.queryStates(userid);
+        System.out.println("角色当前的状态为（血量、背包容量、分数）：");
+        System.out.println(states);
+    }
 }

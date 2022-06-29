@@ -425,6 +425,38 @@ public class MapServiceImpl implements MapService {
 
 
     /**
+     * 查询角色当前状态
+     * @param userid 用户id
+     * @return list(血量,背包容量,分数)
+     */
+    public List<Integer> queryStates(Integer userid){
+        PlayerEntity player = playerReposity.findByUserid(userid);
+        // 获取血量
+        int heart = player.getHeart();
+        // 获取背包容量
+        int bagWeight = player.getBagweight();
+        // 获取分数
+        int score = 0;
+        if (player.getProduct() != null){
+            // 直接拿稀有度折算为分数
+            for (ProductEntity p :  player.getProduct()){
+                score += p.getRare();
+            }
+            // 随便配的系数，后边可以改 >_<
+            score += player.getHeart() * 2;
+        }
+        // 返回
+        List<Integer> res = new ArrayList<>();
+        res.add(heart);
+        res.add(bagWeight);
+        res.add(score);
+
+        return res;
+    }
+
+
+
+    /**
      * 点击图鉴查询所有物品与NPC信息
      * @return 所有信息
      */
@@ -437,6 +469,8 @@ public class MapServiceImpl implements MapService {
         }
         return book;
     }
+
+
 
 
 

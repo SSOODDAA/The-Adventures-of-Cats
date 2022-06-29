@@ -31,8 +31,6 @@ public interface MapService {
     /* 随机生成事件 */
     /* 刷NPC */
     List<Integer> randNPC(Integer userid);
-    /* 刷物品 */
-   // List<ProductEntity> randProduct(Integer userid);
 
     /* 人物行为动作 */
     /* 查看当前房间的物品信息 */
@@ -43,6 +41,9 @@ public interface MapService {
     List<ProductEntity> take(Integer userid, List<Integer> index, List<ProductEntity> products);
     /* 返回背包当前容量 */
     int items(Integer userid);
+
+    /* 查询角色当前状态 */
+    List<Integer> queryStates(Integer userid);
 
     /* 点击图鉴事件 */
     List<ProductEntity> handbook();
