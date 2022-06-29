@@ -5,6 +5,9 @@ import HomePage from "@/views/HomePage";
 import PersonalCenter from "@/views/PersonalCenter";
 import ChooseRole from "@/views/ChooseRole";
 import MainGame from "@/views/MainGame";
+import BookTest from "@/views/BookTest";
+import MenuRole from "@/views/MenuRole";
+import Book from "@/views/Book";
 const routes = [
   {
     path: '/',
@@ -41,6 +44,21 @@ const routes = [
     path: '/maingame',
     name: 'MainGame',
     component: MainGame,
+  },
+  {
+    path: '/booktest',
+    name: 'BookTest',
+    component: BookTest,
+  },
+  {
+    path: '/menurole',
+    name: 'MenuRole',
+    component: MenuRole,
+  },
+  {
+    path: '/bookshow',
+    name: 'BookShow',
+    component: Book,
   }
 ]
 const router = createRouter({

@@ -60,11 +60,12 @@ name: "ChooseRole",
         },
         confirm(){
             if(this.isClick == -1){
+                this.$message({
+                    type:"warning",
+                    message:"未选择角色"
+                })
                 console.log("未选择角色")
-                console.log(this.show)
-                setTimeout(()=>{//设置定时时间 2000为2s
-                    this.show = false
-                },2000)
+
             }
             else{
                let str = sessionStorage.getItem("user")||"{}"

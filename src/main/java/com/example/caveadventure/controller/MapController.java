@@ -65,7 +65,7 @@ public class MapController extends BaseController{
      * 查看图鉴
      * @return 所有物品信息
      */
-    @GetMapping("/handbook")
+    @GetMapping("/CaveAdventure/handbook")
     public JsonResult<List<ProductEntity>> handbook(){
         return new JsonResult<>(OK, mapService.handbook());
     }
