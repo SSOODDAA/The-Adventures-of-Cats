@@ -1,5 +1,7 @@
 <template>
   <div class="MainMap">
+    <el-button class="btn" type="primary"  @click="pauseGame">暂停游戏</el-button>
+    <el-button class="btn" type="primary"  @click="quitGame">返回</el-button>
     <div class="BoardBG">
       <div class="MapBoard">
         <MapCell
@@ -32,7 +34,7 @@
 import MapCell from "@/components/MapCell";
 import {ref} from "vue";
 import request from "@/utils/request";
-
+import { useRouter } from "vue-router";
 export default {
   name: "MainMap",
   components:{
@@ -44,6 +46,8 @@ export default {
     };
   },
   setup(){
+    //初始化路由
+    const router = useRouter();
     let cells=ref([]);
     const ArrivedPath=ref([]);
     const position=ref(0);//初始时角色生成在右上角
@@ -65,24 +69,6 @@ export default {
     const isHere=(index,Roleid) =>{
       return index === position.value? Roleid:0;
     }
-    /**
-     * 向上移动
-     */
-    const GoUp=() =>{
-      var param = new FormData()
-      param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
-      param.append('action',1)//用户账号
-      request.put("/game/move",param).then(res=>{
-        if(res.state===200){
-          console.log(res.data)
-        }else{
-          this.$message({
-            type:"error",
-            message:res.message
-          })
-        }
-      })
-    }
     const GoAction=(action) =>{
       var param = new FormData()
       param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
@@ -102,29 +88,16 @@ export default {
         }
       })
     }
-    /**
-     * 向下移动*
-     */
-    const GoDown=() =>{
-      var param = new FormData()
-      param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
-      param.append('action',2)//用户账号
-      request.put("/game/move",param).then(res=>{
-        if(res.state===200){
-          console.log(res.data);
-          let npctype=res.data[0];
-          position.value=res.data[1];
-          let life=res.data[2];
-          return npctype,position,life;
-        }else{
-          this.$message({
-            type:"error",
-            message:res.message
-          })
-        }
-      })
-    }
+    const pauseGame=()=>{
 
+    }
+    const quitGame=()=>{
+      console.log("退出游戏被点击了")
+      //退出游戏
+      router.push({
+        path:'/homepage'
+      });
+    }
     /**
      * 从后端获取数据生成地图，以及角色的位置
      */
@@ -153,10 +126,10 @@ export default {
       cells,
       start,
       isArrived,
-      GoUp,
       GoAction,
-      GoDown,
+      pauseGame,
       isHere,
+      quitGame,
       look,
     }
   },
@@ -164,16 +137,38 @@ export default {
 </script>
 
 <style scoped>
+.btn,
+.OrderBtn{
+  font-size: large;
+  border-style: none;
+  background:url(../assets/maingame/ControlBtn.png) no-repeat;
+  background-size: 100% 100%;
+  width: 150px;
+  height: 50px;
+}
+.btn{
+  margin-top: -25px;
+  margin-left: 40px;
+  margin-right: 150px;
+  margin-bottom: 20px;
+}
+.OrderBtn:hover,
+.btn:hover{
+  color: #fff;
+  border-radius: 5px;
+  border-style: none;
+  box-shadow: 0 0 10px steelblue,0 0 25px steelblue,0 0 50px steelblue,0 0 100px steelblue;
+}
 .MainMap{
   width: 1000px;
   height: 495px;
-  margin-left: 200px;
+  margin-left: 400px;
+  margin-top: -40px;
 }
 .BoardBG{
   width: 560px;
   height: 520px;
   position: absolute;
-  margin-top: -40px;
   background:url(../assets/maingame/MapBorder.png) no-repeat;
   background-size: 100% 100%;
 }
@@ -196,11 +191,6 @@ export default {
   height: 200px;
 }
 .OrderBtn{
-  width: 150px;
-  height: 50px;
-  border-style: none;
-  background:url(../assets/maingame/ControlBtn.png) no-repeat;
-  background-size: 100% 100%;
   --el-button-text-color: white;
   margin-bottom: 10px;
 }
