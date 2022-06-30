@@ -6,11 +6,7 @@ import com.example.caveadventure.service.MapService;
 import com.example.caveadventure.service.ex.ServiceException;
 import com.example.caveadventure.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +99,8 @@ public class MapController extends BaseController{
      * @return 拿完物品后的背包
      */
     @PutMapping("/take")
-    public JsonResult<List<ProductEntity>> take(Integer userid, List<Integer> index, List<ProductEntity> products){
+    public JsonResult<List<ProductEntity>> take(@RequestParam("userid") Integer userid,
+                                                @RequestParam("index") List<Integer> index, @RequestBody List<ProductEntity> products){
         List<ProductEntity> bag = mapService.take(userid, index, products);
 
         return new JsonResult<List<ProductEntity>>(OK, bag);
