@@ -41,6 +41,8 @@ public interface MapService {
     List<ProductEntity> take(Integer userid, List<Integer> index, List<ProductEntity> products);
     /* 返回背包当前容量 */
     int items(Integer userid);
+    /* 使用物品 */
+    List<ProductEntity> use(Integer userid, int choice);
 
     /* 查询角色当前状态 */
     List<Integer> queryStates(Integer userid);

@@ -54,4 +54,18 @@ public class RoleServiceImpl implements RoleService {
         }
 
     }
+
+
+    /**
+     * 返回角色血量上限
+     * @param roleid 用户id
+     * @return 血量上限
+     */
+    @Override
+    public int getHeartLimit(Integer roleid){
+        return rolemapper.findByRoleid(roleid).getHeart();
+    }
+
+
+
 }

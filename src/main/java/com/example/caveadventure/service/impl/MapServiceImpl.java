@@ -7,6 +7,7 @@ import com.example.caveadventure.entity.MapEntity;
 import com.example.caveadventure.entity.PlayerEntity;
 import com.example.caveadventure.entity.ProductEntity;
 import com.example.caveadventure.service.MapService;
+import com.example.caveadventure.service.RoleService;
 import com.example.caveadventure.service.ex.ServiceException;
 import com.example.caveadventure.service.ex.UpdateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -472,7 +473,44 @@ public class MapServiceImpl implements MapService {
         return book;
     }
 
+    /**
+     * 使用物品
+     * @param userid 用户id
+     * @param choice 被选择物品序号
+     * @return 使用后物品栏
+     */
+    public List<ProductEntity> use(Integer userid, int choice){
+        // 查物品栏
+        PlayerEntity player = playerReposity.findByUserid(userid);
+        List<ProductEntity> products = player.getProduct();
 
+        ProductEntity item = products.get(choice);
+        // 如果物品可以被使用
+        if (item.getType() == 1){
+            int index = item.getId();
+            // 魔法饼干，加血10
+            if (index == 1){
+                RoleService roleService = new RoleServiceImpl();
+                player.setHeart(Math.min(roleService.getHeartLimit(userid), player.getHeart() + 10));
+            }
+            else if (index == 2){
+                // 大力胶囊，加背包容量20
+                player.setBaglimit(player.getBaglimit() + 20);
+                player.setBagweight(player.getBagweight() + 20);
+            }
+            else if (index == 3){
+                // 四叶草，提高奇遇值
+                player.setAdventure(player.getAdventure() + 1);
+            }
+            // 移除被使用物品
+            products.remove(choice);
+            player.setProduct(products);
+        }
+
+        playerReposity.save(player);
+
+        return products;
+    }
 
 
 

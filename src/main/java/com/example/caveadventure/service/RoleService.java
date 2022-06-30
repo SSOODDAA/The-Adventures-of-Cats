@@ -10,4 +10,11 @@ public interface RoleService {
      */
     void selectRole(Integer roleid, Integer userid);
 
+    /**
+     * 返回角色血量上限
+     * @param roleid 用户id
+     * @return 血量上限
+     */
+    int getHeartLimit(Integer roleid);
+
 }

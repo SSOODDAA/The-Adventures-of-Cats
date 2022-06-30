@@ -132,10 +132,18 @@ public class MapController extends BaseController{
         return new JsonResult<List<Integer>>(OK, states);
     }
 
-//    @PutMapping("/use")
-//    public JsonResult<List<Integer>> use(Integer userid, Integer choice){
-//
-//    }
+    /**
+     * 使用物品
+     * @param userid 用户id
+     * @param choice 被选择物品序号
+     * @return 使用后物品栏
+     */
+    @PutMapping("/use")
+    public JsonResult<List<ProductEntity>> use(Integer userid, int choice){
+        List<ProductEntity> res = mapService.use(userid, choice);
+
+        return new JsonResult<List<ProductEntity>>(OK, res);
+    }
 
 
 }
