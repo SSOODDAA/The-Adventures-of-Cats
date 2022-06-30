@@ -1,5 +1,5 @@
 <template>
-  <div :class="'carryItem '+(selected? 'selected':'')">
+  <div class="carryItem">
     <i
         v-if="item"
         :class="'item item-'+item"
@@ -9,27 +9,14 @@
 
 <script>
 export default {
-  name: "CarryItem",
+  name: "RoomProduct",
   props:{
     item:{
       type:Number,
       required:false,
       default:0,
     },
-    selected:{
-      type:Boolean,
-      required:false,
-      default:false,
-    },
   },
-  setup(props,{emit}){
-    const selectOneItem=()=>{
-      emit('selectItem',props.item);
-    }
-    return{
-      selectOneItem,
-    }
-  }
 }
 </script>
 
@@ -41,7 +28,6 @@ export default {
   position: relative;
   background: url("../assets/gamemap/room0.png")no-repeat;
   background-size: 100% 100%;
-  margin-right: 20px;
 }
 .item{
   position: absolute;
@@ -87,11 +73,4 @@ export default {
 .item-12{
   background: url("../assets/Bookimg/12.png")no-repeat;
 }
-.selected{
-  color: #fff;
-  border-radius: 5px;
-  border-style: none;
-  box-shadow: 0 0 5px steelblue,0 0 10px steelblue,0 0 20px steelblue,0 0 40px steelblue;
-}
-
 </style>

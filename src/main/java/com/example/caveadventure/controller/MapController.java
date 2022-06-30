@@ -76,7 +76,7 @@ public class MapController extends BaseController{
      * @param userid 用户id
      * @return 物品信息
      */
-    @RequestMapping("/look")
+    @PostMapping("/look")
     public JsonResult<List<ProductEntity>> look(Integer userid){
         List<ProductEntity> products = mapService.look(userid);
 
