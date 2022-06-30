@@ -34,11 +34,11 @@ public interface MapService {
 
     /* 人物行为动作 */
     /* 查看当前房间的物品信息 */
-    List<ProductEntity> look(Integer userid);
+    List<Integer> look(Integer userid);
     /* 从物品栏中丢弃物品 */
     List<ProductEntity> drop(Integer userid, List<Integer> index);
     /* 从房间拿物品 */
-    List<ProductEntity> take(Integer userid, List<Integer> index, List<ProductEntity> products);
+    List<ProductEntity> take(Integer userid, List<Integer> index, List<Integer> products);
     /* 返回背包当前容量 */
     int items(Integer userid);
     /* 使用物品 */

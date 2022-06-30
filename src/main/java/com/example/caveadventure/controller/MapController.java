@@ -89,10 +89,10 @@ public class MapController extends BaseController{
      * @return 物品信息
      */
     @PostMapping("/look")
-    public JsonResult<List<ProductEntity>> look(Integer userid){
-        List<ProductEntity> products = mapService.look(userid);
+    public JsonResult<List<Integer>> look(Integer userid){
+        List<Integer> products = mapService.look(userid);
 
-        return new JsonResult<List<ProductEntity>>(OK, products);
+        return new JsonResult<List<Integer>>(OK, products);
     }
 
     /**
@@ -115,8 +115,7 @@ public class MapController extends BaseController{
      * @return 拿完物品后的背包
      */
     @PutMapping("/take")
-    public JsonResult<List<ProductEntity>> take(@RequestParam("userid") Integer userid,
-                                                @RequestParam("index") List<Integer> index, @RequestBody List<ProductEntity> products){
+    public JsonResult<List<ProductEntity>> take(Integer userid, List<Integer> index, List<Integer> products){
         List<ProductEntity> bag = mapService.take(userid, index, products);
 
         return new JsonResult<List<ProductEntity>>(OK, bag);

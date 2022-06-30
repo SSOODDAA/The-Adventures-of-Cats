@@ -101,7 +101,7 @@ public class MapServiceTests {
     @Test
     public void look(){
         int userid = 5;
-        List<ProductEntity> products = mapService.look(userid);
+        List<Integer> products = mapService.look(userid);
 
         System.out.println("随机刷出的物品为：");
         System.out.println(products);
@@ -118,7 +118,7 @@ public class MapServiceTests {
         System.out.println("拿东西前老背包内容为：");
         System.out.println(oldBag);
         // 随机刷出物品
-        List<ProductEntity> products = mapService.look(userid);
+        List<Integer> products = mapService.look(userid);
         System.out.println("随机刷出的物品为：");
         System.out.println(products);
         // 测试，选择第一个物品

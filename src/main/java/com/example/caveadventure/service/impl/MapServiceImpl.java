@@ -344,20 +344,20 @@ public class MapServiceImpl implements MapService {
      * @param userid 用户id
      * @return 当前房间物品信息
      */
-    public List<ProductEntity> look(Integer userid){
+    public List<Integer> look(Integer userid){
         // 这里将adventure视为生成物品的数量相关
         PlayerEntity player = playerReposity.findByUserid(userid);
         double num = player.getAdventure() * 5;
 
         // 生成物品
-        List<ProductEntity> res = new ArrayList<>();
+        List<Integer> res = new ArrayList<>();
         Random rand = new Random();
         for (int i=1; i<=num; i++){
             // 取高斯分布的右半侧，递减
            double productId = Math.abs(rand.nextGaussian() * 5);
            int index = (int) productId;
            ProductEntity productEntity = productMapper.findById(index);
-           res.add(productEntity);
+           res.add(productEntity.getId());
         }
 
         return res;
@@ -369,7 +369,7 @@ public class MapServiceImpl implements MapService {
      * @param index 被拿物品在物品栏中的序号
      * @return 更新后的背包（即物品栏）
      */
-    public List<ProductEntity> take(Integer userid, List<Integer> index, List<ProductEntity> products){
+    public List<ProductEntity> take(Integer userid, List<Integer> index, List<Integer> products){
         // 获取角色信息
         PlayerEntity player = playerReposity.findByUserid(userid);
         List<ProductEntity> bag = player.getProduct();
@@ -377,11 +377,13 @@ public class MapServiceImpl implements MapService {
 
         // 注意这里有个次序问题！！！
         for (int i : index){
-            ProductEntity curProduct = products.get(i);
+            ProductEntity curProduct = productMapper.findById(products.get(i));
             int curProductWeight = curProduct.getWeight();
             if (newWeight - curProductWeight >= 0){
                 bag.add(curProduct);
                 newWeight -= curProductWeight;
+            }else {
+                throw new ServiceException("装入物品重量超过背包容量！");
             }
         }
         // 更新存入数据库
