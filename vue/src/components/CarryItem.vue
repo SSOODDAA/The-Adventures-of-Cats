@@ -22,14 +22,6 @@ export default {
       default:false,
     },
   },
-  setup(props,{emit}){
-    const selectOneItem=()=>{
-      emit('selectItem',props.item);
-    }
-    return{
-      selectOneItem,
-    }
-  }
 }
 </script>
 
@@ -93,5 +85,4 @@ export default {
   border-style: none;
   box-shadow: 0 0 5px steelblue,0 0 10px steelblue,0 0 20px steelblue,0 0 40px steelblue;
 }
-
 </style>

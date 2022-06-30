@@ -5,8 +5,8 @@
         v-for="(item,index) in items"
         :key="item+'-'+index"
         :item="item"
-        @click="selectItem(item)"
-        :selected="isSelected(item)"
+        @click="selectItem(index)"
+        :selected="isSelected(index)"
     />
     <el-button class="bookbtn"></el-button>
   </div>
@@ -25,20 +25,28 @@
       </div>
     </div>
     <div class="right">
+      <el-dialog title="房间物品信息" v-model="dialogVisible" center>
+        <div class="product-area">
+          <RoomProduct
+              v-for="(item,index) in products"
+              :key="item+'-'+index"
+              :item="item"
+              @click="selectRoomItem(index)"
+              :selected="isRoomSelected(index)"
+          />
+        </div>
+        <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="dialogVisible = false">cancel</el-button>
+              <el-button type="primary" @click="take()">take</el-button>
+            </span>
+        </template>
+      </el-dialog>
       <div class="OrderBtnArea">
-        <el-dialog title="房间物品信息" v-model="dialogVisible" center>
-          <div class="product-area">
-            <RoomProduct
-                v-for="(item,index) in items"
-                :key="item+'-'+index"
-                :item="item"
-            />
-          </div>
-        </el-dialog>
         <el-button class="OrderBtn" @click="lookProducts()">look</el-button>
         <el-button class="OrderBtn">take</el-button>
         <el-button class="OrderBtn">drop</el-button>
-        <el-button class="OrderBtn" @click="useItem(item)">use</el-button>
+        <el-button class="OrderBtn" @click="use()">use</el-button>
       </div>
       <div class="ControlBtnArea">
         <el-button class="ControlBtn" id="UpBtn" @click="GoAction(1)"></el-button>
@@ -66,47 +74,116 @@ export default {
   },
   data(){
     return{
-        // dialogVisible: false,
         Roleid:ref(JSON.parse(sessionStorage.getItem("roleid"))),
     };
   },
-  methods:{
-    look() {
-
-    }
-  },
   setup(){
-    //初始化路由
-    const router = useRouter();
-    let cells=ref([]);
-    const ArrivedPath=ref([]);
+    const router = useRouter();    //初始化路由
+    let cells=ref([]);      //地图单元格信息
+    const ArrivedPath=ref([]);//用户所走的路径，后续可以进行遮盖显示的扩展
     const position=ref(0);//初始时角色生成在右上角
     const items=ref([1,2,3,4,5,6,7,8]);//用户物品栏的物品
-    let selectedItem=ref(0);
-    const roleid=ref(2);
+    let selectedItem=ref(-1);//选中的物品栏的物品编号
+    let selectedRoom=ref(-1);//选中的房间的物品编号
     let products=ref([1,2,3,4,5,6]);//房间里拥有的物品
+    let fullProducts=[];//房间刷新物品的全部信息
     const dialogVisible=ref(false);//对话框是否可见
-    /**
-     * 获取用户所携带的物品
-     */
-    const getItems=()=>{
+    const lifeValue=ref(0);//生命值
+    const weightValue=ref(0);//载重值
+    const scoreValue=ref(0);//得分；
+    const roleid=ref(2);//角色id
 
+    /**
+     * 查看角色状态
+     */
+    const queryStstus=()=>{
+      var param = new FormData()
+      param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid);//用户账号
+      request.get("game/query",param).then(res=>{
+        if(res.state===200){
+          lifeValue.value=res.data[0];
+          weightValue.value=res.data[1];
+          scoreValue.value=res.data[2];
+          sessionStorage.setItem("status",JSON.stringify(res.data))//缓存角色的状态信息
+        }else{
+          this.$message({
+            type:"error",
+            message:res.message
+          })
+        }
+      })
     }
-    const selectItem=(item)=>{
-      selectedItem.value=item;
-      return true;
+    /**
+     * 查询用户的背包栏信息
+     */
+    const queryBag=()=>{
+      var param = new FormData()
+      param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
+      request.get("game/queryBag",param).then(res=>{
+        if(res.state===200){
+          console.log(res.data)
+          items.value=[];//清空products的内容
+          for(let i=0;i<res.data.length;i++){
+            if(res.data[i]!==null){
+              items.value.push(res.data[i].id);
+            }
+          }
+        }else{
+          this.$message({
+            type:"error",
+            message:res.message
+          })
+        }
+      })
     }
-    const isSelected=(item)=>{
-      return item === selectedItem.value;
+
+    /**
+     * 选中数组编号为index的物品
+     * @param index
+     * @returns {boolean}
+     */
+    const selectItem=(index)=>{
+      if(selectedItem.value===index){
+        selectedItem.value=-1;
+      }else{
+        selectedItem.value=index;
+      }
+      console.log(selectedItem.value);
     }
-    //判断是否在经过的路径中
+    /**
+     * 选中房间的物品
+     * @param index
+     * @returns {boolean}
+     */
+    const selectRoomItem=(index)=>{
+      if(selectedRoom.value===index){
+        selectedRoom.value=-1;
+      }else{
+        selectedRoom.value=index;
+      }
+    }
+    /**
+     * 判断物品栏物品是否被选中
+     * @param index
+     * @returns {boolean}
+     */
+    const isSelected=(index)=>{
+      return index === selectedItem.value;
+    }
+    /**
+     * 判断房间编号为x的物品是否被选中
+     * @param index
+     * @returns {boolean}
+     */
+    const isRoomSelected=(index)=>{
+      return index === selectedRoom.value;
+    }
+    /**
+     * 判断是否在经过的路径中
+     */
     const isArrived = (index) =>{
       return ArrivedPath.value.findIndex(p => p===index)>-1;
     }
-    // //查看房间中的物品
-    // const look=() =>{
-    //   dialogVisible=true;
-    // }
     /**
      * 判断角色位置是否在当前索引位置中,在返回角色id，否则返回0
      * @param index  格子所在位置
@@ -127,7 +204,6 @@ export default {
       param.append('action',action)//用户账号
       request.put("/game/move",param).then(res=>{
         if(res.state===200){
-          console.log(res.data);
           let npctype=res.data[0];
           position.value=res.data[1];
           let life=res.data[2];
@@ -140,15 +216,22 @@ export default {
         }
       })
     }
+
+    /**
+     * 查看房间物品信息
+     */
     const lookProducts=()=>{
       var param = new FormData()
       param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
       request.post("game/look",param).then(res=>{
         if(res.state===200){
-          products.value=res.data;
+          products.value=[];//清空products的内容
+          for(let i=0;i<res.data.length;i++){
+            if(res.data[i]!==null){
+              products.value.push(res.data[i]);
+            }
+          }
           dialogVisible.value=true;
-          console.log(products.value);
-          console.log(dialogVisible.value);
         }else{
           this.$message({
             type:"error",
@@ -157,9 +240,83 @@ export default {
         }
       })
     }
+    /**
+     * 将选中的物品放到背包栏
+     */
+    const take=()=>{
+      var param = new FormData()
+      param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
+      param.append('index',selectedRoom.value);
+      param.append('products',JSON.stringify(products.value));//物品的id列表信息
+      request.post("/game/take",param).then(res=>{
+        if(res.state===200){
+          this.$message({
+            type:"success",
+            message:"物品拾取成功"
+          })
+          queryBag();//更新用户的背包栏
+        }else{
+          this.$message({
+            type:"error",
+            message:res.message
+          })
+        }
+      })
+    }
+    /**
+     * 丢弃背包栏物品
+     */
+    const drop=()=>{
+      var param = new FormData()
+      param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
+      param.append('index',selectedItem.value)
+      request.put("/game/drop",param).then(res=>{
+        if(res.state===200){
+          this.$message({
+            type:"success",
+            message:"物品丢弃成功"
+          })
+          queryBag();//更新用户的背包栏
+        }else{
+          this.$message({
+            type:"error",
+            message:res.message
+          })
+        }
+      })
+    }
+    /**
+     * 使用选中的背包栏物品
+     */
+    const use=()=>{
+      var param = new FormData()
+      param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
+      param.append('choice',selectedItem.value);
+      request.put("/game/use",param).then(res=>{
+        if(res.state===200){
+          this.$message({
+            type:"success",
+            message:"物品使用成功"
+          })
+          queryBag();//更新用户的背包栏
+        }else{
+          this.$message({
+            type:"error",
+            message:res.message
+          })
+        }
+      })
+
+    }
+    /**
+     * 暂停游戏
+     */
     const pauseGame=()=>{
 
     }
+    /**
+     * 返回
+     */
     const quitGame=()=>{
       console.log("退出游戏被点击了")
       //退出游戏
@@ -171,7 +328,8 @@ export default {
      * 从后端获取数据生成地图，以及角色的位置
      */
     const start=()=>{
-      cells.value=JSON.parse(sessionStorage.getItem("cells"))
+      roleid.value=JSON.parse(sessionStorage.getItem("roleid"));//得到角色id值
+      cells.value=JSON.parse(sessionStorage.getItem("cells"))//查询缓存中有无地图信息
       //当缓存中没有地图数据的时候再执行从session中获取的操作
       if(cells.value==null) {
         var param = new FormData()
@@ -180,7 +338,7 @@ export default {
           if(res.state===200) {
             cells.value=res.data;
             sessionStorage.setItem("cells",JSON.stringify(res.data))//缓存地图信息
-            console.log("地图初始化成功");
+            queryStstus();//查询角色的状态
           }else{
             this.$message({
               type:"error",
@@ -189,24 +347,30 @@ export default {
           }
         })
       }
+
     }
     start();
     return {
+      roleid,
       cells,
       start,
       isArrived,
       GoAction,
       pauseGame,
       isHere,
+      queryStstus,
       quitGame,
       items,
       lookProducts,
       products,
       dialogVisible,
       selectItem,
+      selectRoomItem,
       isSelected,
-      getItems,
-      roleid,
+      isRoomSelected,
+      queryBag,
+      use,
+      take,
     }
   },
 }
@@ -346,18 +510,10 @@ export default {
   background-size: 100% 100%;
   margin-left: 50px;
 }
-/*.pdialog{*/
-/*  --el-dialog-width: 30%;*/
-/*  font-size: large;*/
-/*  color: blue;*/
-/*}*/
-.dialogitem{
-  /*position: absolute;*/
-}
 .product-area{
-  width: 200px;
-  position: absolute;
-  margin-left: 200px;
+  width: 500px;
+  position: relative;
+  margin-left: 70px;
   display: flex;
   flex-wrap: wrap;
 }

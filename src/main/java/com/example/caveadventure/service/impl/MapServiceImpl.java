@@ -357,7 +357,11 @@ public class MapServiceImpl implements MapService {
            double productId = Math.abs(rand.nextGaussian() * 5);
            int index = (int) productId;
            ProductEntity productEntity = productMapper.findById(index);
-           res.add(productEntity.getId());
+           if (productEntity != null){
+               res.add(productEntity.getId());
+           }else {
+               i--;
+           }
         }
 
         return res;

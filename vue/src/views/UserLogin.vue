@@ -40,6 +40,7 @@ export default {
   },
   methods:{
     login(){
+      sessionStorage.clear();
       this.$refs['form'].validate((valid) => {
         if(valid) {
           request.get("/users",{

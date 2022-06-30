@@ -104,7 +104,6 @@ public class MapController extends BaseController{
     @PutMapping("/drop")
     public JsonResult<List<ProductEntity>> drop(Integer userid, List<Integer> index){
         List<ProductEntity> bag = mapService.drop(userid, index);
-
         return new JsonResult<List<ProductEntity>>(OK, bag);
     }
 
@@ -114,7 +113,7 @@ public class MapController extends BaseController{
      * @param index 选中的要拿的物品的序号id
      * @return 拿完物品后的背包
      */
-    @PutMapping("/take")
+    @PostMapping("/take")
     public JsonResult<List<ProductEntity>> take(Integer userid, List<Integer> index, List<Integer> products){
         List<ProductEntity> bag = mapService.take(userid, index, products);
 
@@ -140,7 +139,6 @@ public class MapController extends BaseController{
     @GetMapping("/query")
     public JsonResult<List<Integer>> queryStates(Integer userid){
         List<Integer> states = mapService.queryStates(userid);
-
         return new JsonResult<List<Integer>>(OK, states);
     }
 

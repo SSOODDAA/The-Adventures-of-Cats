@@ -1,5 +1,5 @@
 <template>
-  <div class="carryItem">
+  <div :class="'carryItem '+(selected? 'selected':'')">
     <i
         v-if="item"
         :class="'item item-'+item"
@@ -16,6 +16,11 @@ export default {
       required:false,
       default:0,
     },
+    selected:{
+      type:Boolean,
+      required:false,
+      default:false,
+    },
   },
 }
 </script>
@@ -28,6 +33,7 @@ export default {
   position: relative;
   background: url("../assets/gamemap/room0.png")no-repeat;
   background-size: 100% 100%;
+  margin-right: 10px;
 }
 .item{
   position: absolute;
@@ -72,5 +78,11 @@ export default {
 }
 .item-12{
   background: url("../assets/Bookimg/12.png")no-repeat;
+}
+.selected{
+  color: #fff;
+  border-radius: 5px;
+  border-style: none;
+  box-shadow: 0 0 5px steelblue,0 0 10px steelblue,0 0 20px steelblue,0 0 40px steelblue;
 }
 </style>
