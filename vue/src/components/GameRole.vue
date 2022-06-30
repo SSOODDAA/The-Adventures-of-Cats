@@ -1,24 +1,25 @@
 <template>
 <div class="GameRole">
   <div class="avatar">
-    <img src="../assets/chooserole/cat1.png" width="50px" height="60px"/>
+    <i :class="'avicon avicon-'+avicon"></i>
   </div>
   <div class="status">
     <div class="item">
-      <img id="life" src="../assets/maingame/Life.png"/> <span id="lifevalue">60</span>
+      <img id="life" src="../assets/maingame/Life.png"/>
+      <span id="lifevalue">60</span>
     </div>
-
     <div class="item">
-      <img id="weight" src="../assets/maingame/Weight.png"/> <span id="weightvalue">60</span>
+      <img id="weight" src="../assets/maingame/Weight.png"/>
+      <span id="weightvalue">100</span>
     </div>
     <div class="item" id="score">
       <span id="scorevalue">1023456</span>
     </div>
   </div>
   <div class="time">
-    <div id="blank"></div>
     <img id="LeftTime" src="../assets/maingame/LeftTime.png"/>
   </div>
+  <span class="timevalue">10min</span>
 </div>
 </template>
 
@@ -26,26 +27,30 @@
 export default {
   name: "GameRole",
   props:{
+    avicon:{
+      type:Number,
+      required:false,
+      default:1,
+    },
     //生命值
-    LifeValue:{
+    lifeValue:{
       type:Number,
       required:false,
       default:0,
     },
     //载重
-    WeightValue:{
+    weightValue:{
       type: Number,
       required:false,
       default:0,
     },
     //得分
-    Score:{
+    score:{
       type:Number,//0,1,2,3分别表示有角色以及角色的类型
       required:false,
       default:0,
     }
   }
-
 }
 </script>
 
@@ -57,11 +62,32 @@ export default {
 }
 .avatar{
   width: 70px;
-  height: 100px;
-  padding-left: 7px;
+  height: 70px;
+  position: relative;
   background:url("../assets/maingame/headbg.png") no-repeat;
-  margin-left: 7px;
-  margin-top: 25px;
+  background-size: 100% 100%;
+  margin-left:20px;
+  margin-top: 20px;
+}
+.avicon{
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  right: 0;
+  bottom: 0;
+  background-size: 50px 60px;
+}
+.avicon-1{
+  background: url("../assets/chooserole/cat1.png") no-repeat;
+  background-size: 50px 60px;
+}
+.avicon-2{
+  background: url("../assets/chooserole/cat2.png") no-repeat;
+  background-size: 50px 60px;
+}
+.avicon-3{
+  background: url("../assets/chooserole/cat3.png") no-repeat;
+  background-size: 50px 60px;
 }
 .status{
   margin-top: 10px;
@@ -73,7 +99,6 @@ export default {
   background-size: 100% 100%;
   padding: 5px;
   margin-bottom: 5px;
-  margin-top:0px ;
 }
 #life{
   height: 10px;
@@ -97,16 +122,39 @@ export default {
   color:white;
 }
 #lifevalue{
-  color:red;
-  margin-left: 220px;
+  color:white;
+  position: absolute;
+  top: 10px;
+  left: 95px;
+  font-size: medium;
 }
 #weightvalue{
-  color:skyblue;
-  margin-left: 220px;
+  color:white;
+  position: absolute;
+  top: 35px;
+  left: 95px;
+  font-size: medium;
 }
-#LeftTime{
+
+.time{
   width: 250px;
   height: 20px;
-  margin-left: 880px;
+  background: url("../assets/maingame/prograss.png") top right no-repeat;
+  background-size: 100% 100%;
+  position: absolute;
+  top:10px;
+  right: 2px;
+  text-align: right;
+}
+
+#LeftTime{
+  width: 200px;
+  height: 20px;
+}
+.timevalue{
+  position: absolute;
+  top:10px;
+  right: 5px;
+  color: white;
 }
 </style>

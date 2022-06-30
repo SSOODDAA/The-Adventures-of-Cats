@@ -3,8 +3,11 @@
         <div class = "bg">
             <!--一组按钮组件-->
             <div class="div_class_buttonGroup">
-                 <div v-for="item in btns" :key="item.id" class="div_class_defaultBtn" :class={active:getCurrentBtn(item.name)} @click="currentBtn = item.name"> {{item.name}}</div>
+                 <div v-for="item in btns" :key="item.id" class="div_class_defaultBtn" :class={active:getCurrentClassBtn(item.name)} @click="currentBtn = item.name"> {{item.name}}</div>
             </div>
+            <!--<div class="div_item_buttonGroup">
+                <div v-for="item in btns" :key="item.id" class="div_item_defaultBtn" :class={active:getCurrentItemBtn(item.name)} @click="currentBtn = item.name"> {{item.name}}</div>
+            </div>-->
             <button class = "backbtn"><img src="../assets/Bookimg/backbtn.png" /></button>
         </div>
 
@@ -45,7 +48,7 @@ name: "BookShow",
         }
     },
     methods:{
-        getCurrentBtn(data){
+        getCurrentClassBtn(data){
 
             var url = "/handbook"//'获取数据的后台地址'
             request.get(url)
@@ -112,6 +115,13 @@ name: "BookShow",
         left: 200px;
         top: 188px;
     }
+    /*.div_class_defaultBtn:before{
+        position: relative;
+
+        right: 5px;
+
+        content: url(../assets/Bookimg/1.png);
+    }*/
     /*大类按钮被点击*/
     .active{
 
