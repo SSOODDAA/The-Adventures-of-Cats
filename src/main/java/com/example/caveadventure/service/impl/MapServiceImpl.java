@@ -283,7 +283,10 @@ public class MapServiceImpl implements MapService {
             }
             else {
                 // 若是回到上一步位置，则需要扣血 ---  如果没有back这个按钮那么魔法房间是无法保证能够回退的---------   ！！注意！！
-                int lastRoom = route.get(route.size() - 1);
+                int lastRoom = 0;
+                if (route.size() != 1){
+                    lastRoom = route.get(route.size() - 1);
+                }
                 if(nowroomx == lastRoom/5 && nowroomy == lastRoom%5){
                     player.setHeart(player.getHeart() - 5);
                 }

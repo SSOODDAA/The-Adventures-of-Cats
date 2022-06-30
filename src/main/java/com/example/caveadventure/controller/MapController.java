@@ -132,4 +132,10 @@ public class MapController extends BaseController{
         return new JsonResult<List<Integer>>(OK, states);
     }
 
+//    @PutMapping("/use")
+//    public JsonResult<List<Integer>> use(Integer userid, Integer choice){
+//
+//    }
+
+
 }
