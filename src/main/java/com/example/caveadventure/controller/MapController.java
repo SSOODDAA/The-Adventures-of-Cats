@@ -3,6 +3,7 @@ package com.example.caveadventure.controller;
 import com.example.caveadventure.entity.PlayerEntity;
 import com.example.caveadventure.entity.ProductEntity;
 import com.example.caveadventure.service.MapService;
+import com.example.caveadventure.service.PlayerService;
 import com.example.caveadventure.service.ex.ServiceException;
 import com.example.caveadventure.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import java.util.List;
 public class MapController extends BaseController{
     @Autowired
     private MapService mapService;
+    @Autowired
+    private PlayerService playerService;
 
     /**
      * 默认直接触发，初始化游戏基本配置：地图
@@ -65,6 +68,19 @@ public class MapController extends BaseController{
     public JsonResult<List<ProductEntity>> handbook(){
         return new JsonResult<>(OK, mapService.handbook());
     }
+
+    /**
+     * 查看物品栏（背包）
+     * @param userid 用户id
+     * @return 背包物品
+     */
+    @GetMapping("queryBag")
+    public JsonResult<List<ProductEntity>> queryBag(Integer userid){
+        List<ProductEntity> bag = playerService.findProduct(userid);
+
+        return new JsonResult<>(OK, bag);
+    }
+
 
 
     /**
@@ -141,6 +157,7 @@ public class MapController extends BaseController{
 
         return new JsonResult<List<ProductEntity>>(OK, res);
     }
+
 
 
 }
