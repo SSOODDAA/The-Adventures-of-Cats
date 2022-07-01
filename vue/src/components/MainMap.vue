@@ -145,8 +145,6 @@ export default {
      * 查询用户的背包栏信息
      */
     const queryBag=()=>{
-      // var param = new FormData()
-      // param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
       request.get("game/queryBag",{
         params:{
           'userid':JSON.parse(sessionStorage.getItem("user")).userid,
@@ -306,13 +304,10 @@ export default {
     const drop=()=>{
       var param = new FormData()
       param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
-      param.append('index',selectedItem.value)
+      param.append('index',JSON.stringify(selectedItem.value));
       request.put("/game/drop",param).then(res=>{
         if(res.state===200){
-          this.$message({
-            type:"success",
-            message:"物品丢弃成功"
-          })
+          ElMessage.success("物品丢弃成功");
           queryBag();//更新用户的背包栏
         }else{
           this.$message({
