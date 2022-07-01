@@ -9,7 +9,7 @@
       <span id="lifevalue">{{lifeValue}}</span>
     </div>
     <div class="item">
-      <img id="weight" :style="{width:lifeValue+'px'}" src="../assets/maingame/Weight.png"/>
+      <img id="weight" :style="{width:weightValue+'px'}" src="../assets/maingame/Weight.png"/>
       <span id="weightvalue">{{weightValue}}</span>
     </div>
     <div class="item" id="score">

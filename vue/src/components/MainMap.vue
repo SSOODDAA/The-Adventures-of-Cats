@@ -231,6 +231,12 @@ export default {
       param.append('action',action)//用户账号
       request.put("/game/move",param).then(res=>{
         if(res.state===200){
+          let npctype=res.data[0];
+          if(npctype===0){
+            ElMessage.warning("您遇到了怪兽袭击！血量下降！");
+          }else if(npctype===2){
+            ElMessage.success("您遇到了善良的洞穴老人！血量提升！");
+          }
           position.value=res.data[1];
           queryStatus();//更新用户状态
           return position.value;
@@ -257,10 +263,7 @@ export default {
           }
           dialogVisible.value=true;
         }else{
-          this.$message({
-            type:"error",
-            message:res.message
-          })
+          ElMessage.error(res.message);
         }
       })
     }
@@ -279,12 +282,10 @@ export default {
         if(res.state===200){
           ElMessage.success("物品拾取成功");
           dialogVisible.value=false;
+          selectedRoom.value=-1;
           queryBag();//更新用户的背包栏
         }else{
-          this.$message({
-            type:"error",
-            message:res.message
-          })
+          ElMessage.error(res.message);
         }
       })
     }
@@ -299,12 +300,10 @@ export default {
       request.put("/game/drop",param).then(res=>{
         if(res.state===200){
           ElMessage.success("物品丢弃成功");
+          selectedItem.value=-1;
           queryBag();//更新用户的背包栏
         }else{
-          this.$message({
-            type:"error",
-            message:res.message
-          })
+          ElMessage.error(res.message);
         }
       })
     }
@@ -322,10 +321,7 @@ export default {
         if(res.state===200){
           ElMessage.success('您的背包容量为'+res.data);
         }else{
-          this.$message({
-            type:"error",
-            message:res.message
-          })
+          ElMessage.error(res.message);
         }
       })
     }
@@ -369,7 +365,6 @@ export default {
      */
     const quitGame=()=>{
       //保存用户的当前状态
-
       router.push({
         path:'/homepage'
       });
@@ -394,9 +389,6 @@ export default {
         }
 
       },1000);
-      if(count.value===0){
-        console.log("时间耗尽");
-      }
     };
 
     /**
@@ -420,10 +412,7 @@ export default {
             setTimer(TIME_COUNT.value);//启动计时
             sessionStorage.setItem("cells",JSON.stringify(res.data))//缓存地图信息
           }else{
-            this.$message({
-              type:"error",
-              message:res.message
-            })
+            ElMessage.error(res.message);
           }
         })
       }
