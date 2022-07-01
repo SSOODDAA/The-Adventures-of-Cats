@@ -119,8 +119,18 @@ public class MapController extends BaseController{
      * @return 更新后的物品栏
      */
     @PutMapping("/drop")
-    public JsonResult<List<ProductEntity>> drop(Integer userid, List<Integer> index){
-        List<ProductEntity> bag = mapService.drop(userid, index);
+    public JsonResult<List<ProductEntity>> drop(Integer userid, String index){
+        // 强转
+        index = index.trim().replace("[", "");
+        index = index.trim().replace("]", "");
+        String[] istrs = index.split(",");
+        List<Integer> listIndex = new ArrayList<>();
+        for(String str: istrs){
+            int i =Integer.parseInt(str);
+            listIndex.add(i);
+        }
+
+        List<ProductEntity> bag = mapService.drop(userid, listIndex);
         return new JsonResult<List<ProductEntity>>(OK, bag);
     }
 
