@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 这里的映射写法尚且存疑
@@ -114,8 +116,12 @@ public class MapController extends BaseController{
      * @return 拿完物品后的背包
      */
     @PostMapping("/take")
-    public JsonResult<List<ProductEntity>> take(Integer userid, List<Integer> index, List<Integer> products){
-        List<ProductEntity> bag = mapService.take(userid, index, products);
+    public JsonResult<List<ProductEntity>> take(Integer userid, String index, String products){
+        // 强转
+        List<Integer> listProducts = Arrays.stream(products.split(",")).map(s->Integer.parseInt(s.trim())).collect(Collectors.toList());
+        List<Integer> listIndex = Arrays.stream(index.split(",")).map(s->Integer.parseInt(s.trim())).collect(Collectors.toList());
+
+        List<ProductEntity> bag = mapService.take(userid, listIndex, listProducts);
 
         return new JsonResult<List<ProductEntity>>(OK, bag);
     }
