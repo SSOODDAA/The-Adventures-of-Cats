@@ -90,9 +90,10 @@ public class MapController extends BaseController{
      * @param userid 用户id
      * @return 背包物品
      */
-    @GetMapping("queryBag")
-    public JsonResult<List<ProductEntity>> queryBag(Integer userid){
-        List<ProductEntity> bag = playerService.findProduct(userid);
+    @GetMapping("/queryBag")
+    public JsonResult<List<ProductEntity>> queryBag(@RequestParam Integer userid){
+        List<ProductEntity> bag = new ArrayList<>();
+        bag = playerService.findProduct(userid);
 
         return new JsonResult<>(OK, bag);
     }

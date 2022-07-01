@@ -46,15 +46,15 @@
             </div>
             <template #footer>
             <span class="dialog-footer">
-              <el-button @click="dialogVisible = false">cancel</el-button>
-              <el-button type="primary" @click="take()">take</el-button>
+              <el-button class="dialogBtn" type="primary" @click="dialogVisible = false">cancel</el-button>
+              <el-button class="dialogBtn" type="primary" @click="take()">take</el-button>
             </span>
             </template>
           </el-dialog>
           <div class="OrderBtnArea">
             <el-button class="OrderBtn" @click="lookProducts()">look</el-button>
-            <el-button class="OrderBtn">take</el-button>
-            <el-button class="OrderBtn">drop</el-button>
+            <el-button class="OrderBtn" @click="queryItems()">items</el-button>
+            <el-button class="OrderBtn" @click="drop()">drop</el-button>
             <el-button class="OrderBtn" @click="use()">use</el-button>
           </div>
           <div class="ControlBtnArea">
@@ -108,23 +108,18 @@ export default {
     let fullProducts=[];//房间刷新物品的全部信息
     const dialogVisible=ref(false);//对话框是否可见
     const lifeValue=ref(0);//生命值
-    const lifeWidth=ref(200);
     const weightValue=ref(0);//载重值
-    const weithWidth=ref(0);
     const scoreValue=ref(0);//得分；
     const roleid=ref(2);//角色id
-    let endTime=ref(0);
-    const TIME_COUNT=ref(3);
+    const TIME_COUNT=ref(300);
     const count=ref();//游戏剩余时间
     const timer=ref();
-    const show=ref(true);
     const isStop=ref(false);
 
     /**
      * 查看角色状态
      */
     const queryStatus=()=>{
-      console.log("querryStats被调用");
       var param = new FormData();
       param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid);//用户账号
       request.get("game/query",{
@@ -150,9 +145,13 @@ export default {
      * 查询用户的背包栏信息
      */
     const queryBag=()=>{
-      var param = new FormData()
-      param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
-      request.get("game/queryBag",param).then(res=>{
+      // var param = new FormData()
+      // param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
+      request.get("game/queryBag",{
+        params:{
+          'userid':JSON.parse(sessionStorage.getItem("user")).userid,
+        }
+      }).then(res=>{
         if(res.state===200){
           console.log(res.data)
           items.value=[];//清空products的内容
@@ -162,10 +161,7 @@ export default {
             }
           }
         }else{
-          this.$message({
-            type:"error",
-            message:res.message
-          })
+          ElMessage.error(res.message);
         }
       })
     }
@@ -183,6 +179,7 @@ export default {
       }
       console.log(selectedItem.value);
     }
+
     /**
      * 选中房间的物品
      * @param index
@@ -195,6 +192,7 @@ export default {
         selectedRoom.value=index;
       }
     }
+
     /**
      * 判断物品栏物品是否被选中
      * @param index
@@ -203,6 +201,7 @@ export default {
     const isSelected=(index)=>{
       return index === selectedItem.value;
     }
+
     /**
      * 判断房间编号为x的物品是否被选中
      * @param index
@@ -211,12 +210,14 @@ export default {
     const isRoomSelected=(index)=>{
       return index === selectedRoom.value;
     }
+
     /**
      * 判断是否在经过的路径中
      */
     const isArrived = (index) =>{
       return ArrivedPath.value.findIndex(p => p===index)>-1;
     }
+
     /**
      * 判断角色位置是否在当前索引位置中,在返回角色id，否则返回0
      * @param index  格子所在位置
@@ -226,6 +227,7 @@ export default {
     const isHere=(index,roleid) =>{
       return index === position.value? roleid:0;
     }
+
     /**
      * 角色的上下左右移动
      * @param action
@@ -248,10 +250,12 @@ export default {
         }
       })
     }
+
     /**
-     * 查看房间物品信息
+     * look命令-查看房间物品信息
      */
     const lookProducts=()=>{
+      selectedRoom.value=-1;//将选中的房间物品设为空。
       var param = new FormData()
       param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
       request.post("game/look",param).then(res=>{
@@ -271,8 +275,9 @@ export default {
         }
       })
     }
+
     /**
-     * 将选中的物品放到背包栏
+     * take命令-将选中的物品放到背包栏
      */
     const take=()=>{
       var param = new FormData()
@@ -283,10 +288,8 @@ export default {
       param.append('products',JSON.stringify(products.value));//物品的id列表信息
       request.post("/game/take",param).then(res=>{
         if(res.state===200){
-          this.$message({
-            type:"success",
-            message:"物品拾取成功"
-          })
+          ElMessage.success("物品拾取成功");
+          dialogVisible.value=false;
           queryBag();//更新用户的背包栏
         }else{
           this.$message({
@@ -296,8 +299,9 @@ export default {
         }
       })
     }
+
     /**
-     * 丢弃背包栏物品
+     *drop命令- 丢弃背包栏物品
      */
     const drop=()=>{
       var param = new FormData()
@@ -319,7 +323,29 @@ export default {
       })
     }
     /**
-     * 使用选中的背包栏物品
+     * items命令—查询背包的容量
+     */
+    const queryItems=()=>{
+      var param = new FormData();
+      param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid);//用户账号
+      request.get("game/items",{
+        params:{
+          'userid':JSON.parse(sessionStorage.getItem("user")).userid,
+        }
+      }).then(res=>{
+        if(res.state===200){
+          ElMessage.success('您的背包容量为'+res.data);
+        }else{
+          this.$message({
+            type:"error",
+            message:res.message
+          })
+        }
+      })
+    }
+
+    /**
+     * use命令-使用选中的背包栏物品
      */
     const use=()=>{
       var param = new FormData()
@@ -341,6 +367,7 @@ export default {
       })
 
     }
+
     /**
      * 暂停或者恢复游戏
      */
@@ -359,8 +386,8 @@ export default {
      * 返回
      */
     const quitGame=()=>{
-      console.log("退出游戏被点击了")
-      //退出游戏
+      //保存用户的当前状态
+
       router.push({
         path:'/homepage'
       });
@@ -374,17 +401,14 @@ export default {
       count.value=time;
       timer.value=setInterval(()=>{
         if(count.value>0 && count.value<=time){
-          show.value=false;
           count.value--;
         }
         else{
-          show.value=true;
           clearInterval(timer.value);
           timer.value=null;
           //时间耗尽，提示用户结束游戏
           ElMessage.success('游戏结束，您最终的得分是 '+scoreValue.value);
           isStop.value=true;
-          // router.push("/homepage");
         }
 
       },1000);
@@ -409,6 +433,7 @@ export default {
             cells.value=res.data;
             timer.value=0;
             queryStatus();//查询用户状态
+            queryBag();//查询背包状态
             isStop.value=false;
             setTimer(TIME_COUNT.value);//启动计时
             sessionStorage.setItem("cells",JSON.stringify(res.data))//缓存地图信息
@@ -430,6 +455,8 @@ export default {
       isArrived,
       GoAction,
       pauseGame,
+      queryItems,
+      drop,
       isHere,
       quitGame,
       items,
@@ -447,7 +474,6 @@ export default {
       weightValue,
       scoreValue,
       timer,
-      show,
       TIME_COUNT,
       count,
       isStop,
@@ -465,7 +491,8 @@ export default {
   background-attachment: fixed;
 }
 .btn,
-.OrderBtn{
+.OrderBtn,
+.dialogBtn{
   font-size: large;
   border-style: none;
   background:url(../assets/maingame/ControlBtn.png) no-repeat;
@@ -473,6 +500,11 @@ export default {
   width: 150px;
   height: 50px;
 }
+.dialogBtn{
+  width: 100px;
+  height: 40px;
+}
+
 .btn{
   margin-top: -25px;
   margin-left: 40px;

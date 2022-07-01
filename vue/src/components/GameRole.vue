@@ -16,8 +16,8 @@
       <span id="scorevalue">{{ score }}</span>
     </div>
   </div>
-  <div class="time" :style="{width:leftTime+'px'}">
-    <img id="LeftTime" src="../assets/maingame/LeftTime.png"/>
+  <div class="time">
+    <img id="LeftTime" :style="{width:leftTime+'px'}" src="../assets/maingame/LeftTime.png"/>
   </div>
   <span class="timevalue">{{leftTime}}</span>
 </div>
@@ -148,7 +148,6 @@ export default {
 }
 
 #LeftTime{
-  width: 200px;
   height: 20px;
 }
 .timevalue{

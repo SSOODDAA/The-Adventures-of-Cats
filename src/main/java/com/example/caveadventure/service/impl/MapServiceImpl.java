@@ -418,6 +418,9 @@ public class MapServiceImpl implements MapService {
         // 获取角色信息
         PlayerEntity player = playerReposity.findByUserid(userid);
         List<ProductEntity> bag = player.getProduct();
+        if (bag == null){
+            bag = new ArrayList<ProductEntity>();
+        }
         int newWeight = player.getBagweight();
 
         // 注意这里有个次序问题！！！
