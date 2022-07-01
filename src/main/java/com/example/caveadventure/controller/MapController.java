@@ -8,6 +8,7 @@ import com.example.caveadventure.service.ex.ServiceException;
 import com.example.caveadventure.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -131,8 +132,19 @@ public class MapController extends BaseController{
     @PostMapping("/take")
     public JsonResult<List<ProductEntity>> take(Integer userid, String index, String products){
         // 强转
-        List<Integer> listProducts = Arrays.stream(products.split(",")).map(s->Integer.parseInt(s.trim())).collect(Collectors.toList());
-        List<Integer> listIndex = Arrays.stream(index.split(",")).map(s->Integer.parseInt(s.trim())).collect(Collectors.toList());
+        String[] pstrs = products.split(",");
+        List<Integer> listProducts = new ArrayList<>();
+        for(String str: pstrs){
+            int i =Integer.parseInt(str);
+            listProducts.add(i);
+        }
+
+        String[] istrs = index.split(",");
+        List<Integer> listIndex = new ArrayList<>();
+        for(String str: istrs){
+            int i =Integer.parseInt(str);
+            listIndex.add(i);
+        }
 
         List<ProductEntity> bag = mapService.take(userid, listIndex, listProducts);
 
