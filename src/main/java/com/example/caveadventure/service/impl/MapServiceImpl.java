@@ -395,7 +395,7 @@ public class MapServiceImpl implements MapService {
         Random rand = new Random();
         for (int i=1; i<=num; i++){
             // 取高斯分布的右半侧，递减
-           double productId = Math.abs(rand.nextGaussian() * 5);
+           double productId = Math.max(10, Math.abs(rand.nextGaussian() * 5));
            int index = (int) productId;
            ProductEntity productEntity = productMapper.findById(index);
            if (productEntity != null){
