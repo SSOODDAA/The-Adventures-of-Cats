@@ -1,58 +1,74 @@
 <template>
-  <div class="left">
-    <span class="title">物品栏</span>
-    <CarryItem
-        v-for="(item,index) in items"
-        :key="item+'-'+index"
-        :item="item"
-        @click="selectItem(index)"
-        :selected="isSelected(index)"
+  <div class="GamePage">
+    <GameRole
+        :avicon="roleid"
+        :life-value="lifeValue"
+        :weight-value="weightValue"
+        :score="scoreValue"
+        :left-time="count"
     />
-    <el-button class="bookbtn"></el-button>
-  </div>
-  <div class="MainMap">
-    <el-button class="btn" type="primary"  @click="pauseGame">暂停游戏</el-button>
-    <el-button class="btn" type="primary"  @click="quitGame">返回</el-button>
-    <div class="BoardBG">
-      <div class="MapBoard">
-        <MapCell
-            v-for="(cell,index) in cells"
-            :key="cell+'-'+index"
-            :icon="cell"
-            :arrived="isArrived(index)"
-            :role="isHere(index,Roleid)"
+    <div class="bottom">
+      <div class="left">
+        <span class="title">物品栏</span>
+        <CarryItem
+            v-for="(item,index) in items"
+            :key="item+'-'+index"
+            :item="item"
+            @click="selectItem(index)"
+            :selected="isSelected(index)"
         />
+        <el-button class="bookbtn"></el-button>
       </div>
-    </div>
-    <div class="right">
-      <el-dialog title="房间物品信息" v-model="dialogVisible" center>
-        <div class="product-area">
-          <RoomProduct
-              v-for="(item,index) in products"
-              :key="item+'-'+index"
-              :item="item"
-              @click="selectRoomItem(index)"
-              :selected="isRoomSelected(index)"
-          />
+      <div class="MainMap">
+        <el-button class="btn" type="primary"  @click="pauseGame">暂停游戏</el-button>
+        <el-button class="btn" type="primary"  @click="quitGame">返回</el-button>
+        <div class="BoardBG">
+          <div class="MapBoard">
+            <MapCell
+                v-for="(cell,index) in cells"
+                :key="cell+'-'+index"
+                :arrived="isArrived(index)"
+                :icon="cell"
+                :role="isHere(index,roleid)"
+            />
+          </div>
         </div>
-        <template #footer>
+        <div class="right">
+          <el-dialog title="房间物品信息" v-model="dialogVisible" center>
+            <div class="product-area">
+              <RoomProduct
+                  v-for="(item,index) in products"
+                  :key="item+'-'+index"
+                  :item="item"
+                  @click="selectRoomItem(index)"
+                  :selected="isRoomSelected(index)"
+              />
+            </div>
+            <template #footer>
             <span class="dialog-footer">
               <el-button @click="dialogVisible = false">cancel</el-button>
               <el-button type="primary" @click="take()">take</el-button>
             </span>
-        </template>
-      </el-dialog>
-      <div class="OrderBtnArea">
-        <el-button class="OrderBtn" @click="lookProducts()">look</el-button>
-        <el-button class="OrderBtn">take</el-button>
-        <el-button class="OrderBtn">drop</el-button>
-        <el-button class="OrderBtn" @click="use()">use</el-button>
-      </div>
-      <div class="ControlBtnArea">
-        <el-button class="ControlBtn" id="UpBtn" @click="GoAction(1)"></el-button>
-        <el-button class="ControlBtn" id="LeftBtn" @click="GoAction(3)"></el-button>
-        <el-button class="ControlBtn" id="RightBtn" @click="GoAction(4)"></el-button>
-        <el-button class="ControlBtn" id="DownBtn" @click="GoAction(2)"></el-button>
+            </template>
+          </el-dialog>
+          <div class="OrderBtnArea">
+            <el-button class="OrderBtn" @click="lookProducts()">look</el-button>
+            <el-button class="OrderBtn">take</el-button>
+            <el-button class="OrderBtn">drop</el-button>
+            <el-button class="OrderBtn" @click="use()">use</el-button>
+          </div>
+          <div class="ControlBtnArea">
+            <el-button class="ControlBtn" id="UpBtn" @click="GoAction(1)"></el-button>
+            <el-button class="ControlBtn" id="LeftBtn" @click="GoAction(3)"></el-button>
+            <el-button class="ControlBtn" id="RightBtn" @click="GoAction(4)"></el-button>
+            <el-button class="ControlBtn" id="DownBtn" @click="GoAction(2)"></el-button>
+          </div>
+        </div>
+        <transition name="alan_scale">
+          <div class="stop" v-show="isStop">
+            <img src="../assets/gamemap/stop.png" alt />
+          </div>
+        </transition>
       </div>
     </div>
   </div>
@@ -65,12 +81,15 @@ import request from "@/utils/request";
 import { useRouter } from "vue-router";
 import CarryItem from "@/components/CarryItem";
 import RoomProduct from "@/components/RoomProduct";
+import GameRole from "@/components/GameRole";
+import {ElMessage} from 'element-plus';
 export default {
   name: "MainMap",
   components:{
     RoomProduct,
     CarryItem,
-    MapCell
+    MapCell,
+    GameRole,
   },
   data(){
     return{
@@ -89,17 +108,30 @@ export default {
     let fullProducts=[];//房间刷新物品的全部信息
     const dialogVisible=ref(false);//对话框是否可见
     const lifeValue=ref(0);//生命值
+    const lifeWidth=ref(200);
     const weightValue=ref(0);//载重值
+    const weithWidth=ref(0);
     const scoreValue=ref(0);//得分；
     const roleid=ref(2);//角色id
+    let endTime=ref(0);
+    const TIME_COUNT=ref(3);
+    const count=ref();//游戏剩余时间
+    const timer=ref();
+    const show=ref(true);
+    const isStop=ref(false);
 
     /**
      * 查看角色状态
      */
-    const queryStstus=()=>{
-      var param = new FormData()
+    const queryStatus=()=>{
+      console.log("querryStats被调用");
+      var param = new FormData();
       param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid);//用户账号
-      request.get("game/query",param).then(res=>{
+      request.get("game/query",{
+        params:{
+          'userid':JSON.parse(sessionStorage.getItem("user")).userid,
+        }
+      }).then(res=>{
         if(res.state===200){
           lifeValue.value=res.data[0];
           weightValue.value=res.data[1];
@@ -113,6 +145,7 @@ export default {
         }
       })
     }
+
     /**
      * 查询用户的背包栏信息
      */
@@ -187,11 +220,11 @@ export default {
     /**
      * 判断角色位置是否在当前索引位置中,在返回角色id，否则返回0
      * @param index  格子所在位置
-     * @param Roleid
+     * @param roleid
      * @returns {any|number}
      */
-    const isHere=(index,Roleid) =>{
-      return index === position.value? Roleid:0;
+    const isHere=(index,roleid) =>{
+      return index === position.value? roleid:0;
     }
     /**
      * 角色的上下左右移动
@@ -204,10 +237,9 @@ export default {
       param.append('action',action)//用户账号
       request.put("/game/move",param).then(res=>{
         if(res.state===200){
-          let npctype=res.data[0];
           position.value=res.data[1];
-          let life=res.data[2];
-          return npctype,position.value,life;
+          queryStatus();//更新用户状态
+          return position.value;
         }else{
           this.$message({
             type:"error",
@@ -216,7 +248,6 @@ export default {
         }
       })
     }
-
     /**
      * 查看房间物品信息
      */
@@ -246,7 +277,9 @@ export default {
     const take=()=>{
       var param = new FormData()
       param.append('userid',JSON.parse(sessionStorage.getItem("user")).userid)//用户账号
-      param.append('index',selectedRoom.value);
+      let index=[];
+      index.push(selectedRoom.value);
+      param.append('index',JSON.stringify(index));
       param.append('products',JSON.stringify(products.value));//物品的id列表信息
       request.post("/game/take",param).then(res=>{
         if(res.state===200){
@@ -309,10 +342,18 @@ export default {
 
     }
     /**
-     * 暂停游戏
+     * 暂停或者恢复游戏
      */
     const pauseGame=()=>{
-
+      //如果时间已经耗尽
+      if(count.value===0){
+        ElMessage.warning('游戏已经结束');
+        return;
+      }
+      isStop.value=!isStop.value;
+      console.log(isStop.value);
+      if(isStop.value===true){clearInterval(timer.value);}
+      else{setTimer(count.value);}
     }
     /**
      * 返回
@@ -324,12 +365,41 @@ export default {
         path:'/homepage'
       });
     }
+
+    /**
+     * 设置倒计时
+     */
+    const setTimer=(time)=>{
+      console.log('settime被调用');
+      count.value=time;
+      timer.value=setInterval(()=>{
+        if(count.value>0 && count.value<=time){
+          show.value=false;
+          count.value--;
+        }
+        else{
+          show.value=true;
+          clearInterval(timer.value);
+          timer.value=null;
+          //时间耗尽，提示用户结束游戏
+          ElMessage.success('游戏结束，您最终的得分是 '+scoreValue.value);
+          isStop.value=true;
+          // router.push("/homepage");
+        }
+
+      },1000);
+      if(count.value===0){
+        console.log("时间耗尽");
+      }
+    };
+
     /**
      * 从后端获取数据生成地图，以及角色的位置
      */
     const start=()=>{
+      cells.value=null;
       roleid.value=JSON.parse(sessionStorage.getItem("roleid"));//得到角色id值
-      cells.value=JSON.parse(sessionStorage.getItem("cells"))//查询缓存中有无地图信息
+      // cells.value=JSON.parse(sessionStorage.getItem("cells"))//查询缓存中有无地图信息
       //当缓存中没有地图数据的时候再执行从session中获取的操作
       if(cells.value==null) {
         var param = new FormData()
@@ -337,8 +407,11 @@ export default {
         request.post("/game",param).then(res=>{
           if(res.state===200) {
             cells.value=res.data;
+            timer.value=0;
+            queryStatus();//查询用户状态
+            isStop.value=false;
+            setTimer(TIME_COUNT.value);//启动计时
             sessionStorage.setItem("cells",JSON.stringify(res.data))//缓存地图信息
-            queryStstus();//查询角色的状态
           }else{
             this.$message({
               type:"error",
@@ -347,18 +420,17 @@ export default {
           }
         })
       }
-
     }
     start();
     return {
       roleid,
       cells,
       start,
+      queryStatus,
       isArrived,
       GoAction,
       pauseGame,
       isHere,
-      queryStstus,
       quitGame,
       items,
       lookProducts,
@@ -371,12 +443,27 @@ export default {
       queryBag,
       use,
       take,
+      lifeValue,
+      weightValue,
+      scoreValue,
+      timer,
+      show,
+      TIME_COUNT,
+      count,
+      isStop,
     }
   },
 }
 </script>
 
 <style scoped>
+.GamePage{
+  box-sizing: border-box;
+  background: url(../assets/Bg.png) no-repeat;
+  background-size: 100% 100%;
+  min-height: 200vh;
+  background-attachment: fixed;
+}
 .btn,
 .OrderBtn{
   font-size: large;
@@ -516,5 +603,27 @@ export default {
   margin-left: 70px;
   display: flex;
   flex-wrap: wrap;
+}
+.bottom{
+  height: 495px;
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+.stop {
+  width: 1260px;
+  height: 549px;
+  background: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 100px;
+  left: 0px;
+}
+.stop img {
+  width: 20%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 0;
 }
 </style>

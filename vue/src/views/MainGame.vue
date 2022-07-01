@@ -1,12 +1,5 @@
 <template>
-<div class="GamePage">
-  <GameRole
-      :avicon="roleid"
-  />
-  <div class="bottom">
-    <MainMap/>
-  </div>
-</div>
+  <MainMap/>
 </template>
 
 <script>
@@ -15,7 +8,7 @@ import GameRole from "@/components/GameRole";
 import CarryItem from "@/components/CarryItem";
 export default {
   name: "MainGame",
-  components: {GameRole, MainMap},
+  components: {MainMap},
   setup(){
 
   }

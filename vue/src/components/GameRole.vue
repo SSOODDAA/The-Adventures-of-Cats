@@ -5,21 +5,21 @@
   </div>
   <div class="status">
     <div class="item">
-      <img id="life" src="../assets/maingame/Life.png"/>
-      <span id="lifevalue">60</span>
+      <img id="life" :style="{width:lifeValue+'px'}" src="../assets/maingame/Life.png "/>
+      <span id="lifevalue">{{lifeValue}}</span>
     </div>
     <div class="item">
-      <img id="weight" src="../assets/maingame/Weight.png"/>
-      <span id="weightvalue">100</span>
+      <img id="weight" :style="{width:lifeValue+'px'}" src="../assets/maingame/Weight.png"/>
+      <span id="weightvalue">{{weightValue}}</span>
     </div>
     <div class="item" id="score">
-      <span id="scorevalue">1023456</span>
+      <span id="scorevalue">{{ score }}</span>
     </div>
   </div>
-  <div class="time">
+  <div class="time" :style="{width:leftTime+'px'}">
     <img id="LeftTime" src="../assets/maingame/LeftTime.png"/>
   </div>
-  <span class="timevalue">10min</span>
+  <span class="timevalue">{{leftTime}}</span>
 </div>
 </template>
 
@@ -46,6 +46,12 @@ export default {
     },
     //得分
     score:{
+      type:Number,//0,1,2,3分别表示有角色以及角色的类型
+      required:false,
+      default:0,
+    },
+    //游戏剩余时间
+    leftTime:{
       type:Number,//0,1,2,3分别表示有角色以及角色的类型
       required:false,
       default:0,
@@ -100,15 +106,9 @@ export default {
   padding: 5px;
   margin-bottom: 5px;
 }
-#life{
+#life,#weight{
   height: 10px;
   position: absolute;
-  width: 100px;
-}
-#weight{
-  height: 10px;
-  position: absolute;
-  width: 150px;
 }
 #score{
   width: 200px;

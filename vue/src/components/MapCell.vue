@@ -65,11 +65,11 @@ export default {
   background-size: 50px 50px;
 }
 .role-2{
-  background: url("../assets/chooserole/cat1.png")no-repeat;
+  background: url("../assets/chooserole/cat2.png")no-repeat;
   background-size: 50px 50px;
 }
 .role-3{
-  background: url("../assets/chooserole/cat1.png")no-repeat;
+  background: url("../assets/chooserole/cat3.png")no-repeat;
   background-size: 50px 50px;
 }
 </style>

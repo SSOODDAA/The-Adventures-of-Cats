@@ -143,7 +143,7 @@ public class MapController extends BaseController{
      * @return list(血量,背包容量,分数)
      */
     @GetMapping("/query")
-    public JsonResult<List<Integer>> queryStates(Integer userid){
+    public JsonResult<List<Integer>> queryStates(@RequestParam Integer userid){
         List<Integer> states = mapService.queryStates(userid);
         return new JsonResult<List<Integer>>(OK, states);
     }
