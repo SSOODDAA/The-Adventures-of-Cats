@@ -95,7 +95,7 @@ export default {
     let cells=ref([]);      //地图单元格信息
     const ArrivedPath=ref([]);//用户所走的路径，后续可以进行遮盖显示的扩展
     const position=ref(0);//初始时角色生成在右上角
-    const items=ref([1,2,3,4,5,6,7,8]);//用户物品栏的物品
+    const items=ref([]);//用户物品栏的物品
     let selectedItem=ref(-1);//选中的物品栏的物品编号
     let selectedRoom=ref(-1);//选中的房间的物品编号
     let products=ref([1,2,3,4,5,6]);//房间里拥有的物品
@@ -105,7 +105,7 @@ export default {
     const weightValue=ref(0);//载重值
     const scoreValue=ref(0);//得分；
     const roleid=ref(2);//角色id
-    const TIME_COUNT=ref(300);
+    const TIME_COUNT=ref(3);
     const count=ref();//游戏剩余时间
     const timer=ref();
     const isStop=ref(false);
@@ -233,9 +233,9 @@ export default {
         if(res.state===200){
           let npctype=res.data[0];
           if(npctype===0){
-            ElMessage.warning("您遇到了怪兽袭击！血量下降！");
+            ElMessage.error("您遇到了怪兽袭击！血量下降！");
           }else if(npctype===2){
-            ElMessage.success("您遇到了善良的洞穴老人！血量提升！");
+            ElMessage.success("您遇到了善良的洞穴老人！");
           }
           position.value=res.data[1];
           queryStatus();//更新用户状态
@@ -383,6 +383,7 @@ export default {
         else{
           clearInterval(timer.value);
           timer.value=null;
+          queryStatus();
           //时间耗尽，提示用户结束游戏
           ElMessage.success('游戏结束，您最终的得分是 '+scoreValue.value);
           isStop.value=true;

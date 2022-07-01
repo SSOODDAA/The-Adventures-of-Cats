@@ -185,6 +185,7 @@ public class MapController extends BaseController{
     @GetMapping("/query")
     public JsonResult<List<Integer>> queryStates(@RequestParam Integer userid){
         List<Integer> states = mapService.queryStates(userid);
+        System.out.println("得分"+states.get(2));
         return new JsonResult<List<Integer>>(OK, states);
     }
 
