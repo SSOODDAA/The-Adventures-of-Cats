@@ -196,7 +196,8 @@ public class MapController extends BaseController{
      */
     @PutMapping("/use")
     public JsonResult<List<ProductEntity>> use(Integer userid, int choice){
-        List<ProductEntity> res = mapService.use(userid, choice);
+        List<ProductEntity> res = new ArrayList<>();
+        res = mapService.use(userid, choice);
 
         return new JsonResult<List<ProductEntity>>(OK, res);
     }

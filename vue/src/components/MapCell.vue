@@ -5,7 +5,6 @@
     </i>
   </div>
 </template>
-
 <script>
 export default {
   name: "MapCell",
@@ -28,7 +27,6 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .map-cell{
   padding:1px;

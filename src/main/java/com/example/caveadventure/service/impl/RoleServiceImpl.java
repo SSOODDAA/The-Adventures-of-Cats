@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 返回角色血量上限
-     * @param roleid 用户id
+     * @param roleid 角色id
      * @return 血量上限
      */
     @Override

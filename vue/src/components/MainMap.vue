@@ -73,7 +73,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import MapCell from "@/components/MapCell";
 import {ref} from "vue";
@@ -90,11 +89,6 @@ export default {
     CarryItem,
     MapCell,
     GameRole,
-  },
-  data(){
-    return{
-        Roleid:ref(JSON.parse(sessionStorage.getItem("roleid"))),
-    };
   },
   setup(){
     const router = useRouter();    //初始化路由
@@ -166,8 +160,8 @@ export default {
 
     /**
      * 选中数组编号为index的物品
-     * @param index
-     * @returns {boolean}
+     * @param index 物品编号
+     * @returns {boolean} 是否选中
      */
     const selectItem=(index)=>{
       if(selectedItem.value===index){
@@ -228,7 +222,7 @@ export default {
 
     /**
      * 角色的上下左右移动
-     * @param action
+     * @param action 移动动作
      * @constructor
      */
     const GoAction=(action) =>{
@@ -241,10 +235,7 @@ export default {
           queryStatus();//更新用户状态
           return position.value;
         }else{
-          this.$message({
-            type:"error",
-            message:res.message
-          })
+          ElMessage.error(res.message);
         }
       })
     }
@@ -348,16 +339,11 @@ export default {
       param.append('choice',selectedItem.value);
       request.put("/game/use",param).then(res=>{
         if(res.state===200){
-          this.$message({
-            type:"success",
-            message:"物品使用成功"
-          })
+          ElMessage.success("物品使用成功");
+          selectedItem.value=-1;
           queryBag();//更新用户的背包栏
         }else{
-          this.$message({
-            type:"error",
-            message:res.message
-          })
+          ElMessage.error(res.message);
         }
       })
 
@@ -369,6 +355,7 @@ export default {
     const pauseGame=()=>{
       //如果时间已经耗尽
       if(count.value===0){
+        queryStatus();
         ElMessage.warning('游戏已经结束');
         return;
       }
@@ -476,7 +463,6 @@ export default {
   },
 }
 </script>
-
 <style scoped>
 .GamePage{
   box-sizing: border-box;

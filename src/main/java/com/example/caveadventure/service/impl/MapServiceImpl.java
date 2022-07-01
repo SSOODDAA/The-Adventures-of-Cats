@@ -30,6 +30,8 @@ public class MapServiceImpl implements MapService {
     /* 查物品 */
     @Autowired
     public ProductMapper productMapper;
+    @Autowired
+    public RoleService roleService;
 
 
     /**
@@ -526,8 +528,8 @@ public class MapServiceImpl implements MapService {
             int index = item.getId();
             // 魔法饼干，加血10
             if (index == 1){
-                RoleService roleService = new RoleServiceImpl();
-                player.setHeart(Math.min(roleService.getHeartLimit(userid), player.getHeart() + 10));
+                System.out.println(roleService.getHeartLimit(player.getRoleid()));
+                player.setHeart(Math.min(roleService.getHeartLimit(player.getRoleid()), player.getHeart() + 10));
             }
             else if (index == 2){
                 // 大力胶囊，加背包容量20
