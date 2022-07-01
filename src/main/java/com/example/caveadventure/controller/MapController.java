@@ -38,6 +38,19 @@ public class MapController extends BaseController{
     }
 
     /**
+     * 继续游戏，读取存档地图
+     * @param userid 用户id
+     * @return 存档老地图
+     */
+    @PostMapping("/continueGame")
+    public JsonResult<int[]> continueGame(Integer userid){
+        int[]res = mapService.contineGame(userid);
+
+        return new JsonResult<int[]>(OK, res);
+    }
+
+
+    /**
      * 人物移动上下左右事件与刷NPC
      * 需要对上下左右移动有编号，传入编号。如这里，上下左右->1234
      * @param userid 用户id
@@ -159,6 +172,17 @@ public class MapController extends BaseController{
         List<ProductEntity> res = mapService.use(userid, choice);
 
         return new JsonResult<List<ProductEntity>>(OK, res);
+    }
+
+    /**
+     * 结束游戏
+     * @param userid 用户id
+     * @param endTime 结束时剩余时间
+     */
+    @PutMapping("/endGame")
+    public JsonResult<Void> endGame(Integer userid, Integer endTime){
+        mapService.endGame(userid, endTime);
+        return new JsonResult<Void>(OK);
     }
 
 

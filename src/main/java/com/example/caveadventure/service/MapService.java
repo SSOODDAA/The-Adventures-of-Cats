@@ -8,6 +8,9 @@ public interface MapService {
 
     /* 初始化地图 */
     int[] init(Integer userid);
+    /* 继续游戏，读取存档地图 */
+    int[] contineGame(Integer userid);
+
     /* 生成若干随机数 */
     List<Integer> randSeveralNums(int len, int start, int end, List<Integer> sub);
     /* 判断图连通性 */
@@ -49,5 +52,7 @@ public interface MapService {
 
     /* 点击图鉴事件 */
     List<ProductEntity> handbook();
+    /* 结束游戏，设置时间 */
+    void endGame(Integer userid, Integer endTime);
 
 }

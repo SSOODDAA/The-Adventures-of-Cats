@@ -7,6 +7,7 @@ import com.example.caveadventure.entity.MapEntity;
 import com.example.caveadventure.entity.PlayerEntity;
 import com.example.caveadventure.entity.ProductEntity;
 import com.example.caveadventure.service.MapService;
+import com.example.caveadventure.service.PlayerService;
 import com.example.caveadventure.service.RoleService;
 import com.example.caveadventure.service.ex.ServiceException;
 import com.example.caveadventure.service.ex.UpdateException;
@@ -52,11 +53,16 @@ public class MapServiceImpl implements MapService {
             for(int i : stones){
                 map[i/5][i%5] = 1;
             }
-        }while(!judgeConnected(map));
+        }while(!judgeConnected(map) || stones.contains(0));  // 石头不能在出生点
 
         // 2代表魔法房间
-        List<Integer> magic = randSeveralNums(1, 0, 24, stones);
-        int magicRoom = magic.get(magic.size()-1);
+        List<Integer> magic;
+        int magicRoom;
+        do{
+            magic = randSeveralNums(1, 0, 24, stones);
+            magicRoom = magic.get(magic.size()-1);
+        }while (magicRoom == 0);  //
+
         map[magicRoom/5][magicRoom%5] = 2;
 
         // 依次返回石头与魔法房间的序号
@@ -94,6 +100,41 @@ public class MapServiceImpl implements MapService {
 
         return finalMap;
     }
+
+
+    /**
+     * 继续游戏，读取存档地图
+     * @param userid 用户id
+     * @return 存档老地图
+     */
+    public int[] contineGame(Integer userid){
+        List<Integer> res = new ArrayList<>();
+
+        MapEntity mapEntity = mapReposity.findByUserid(userid);
+        res.addAll(mapEntity.getDeadroom());
+        res.add(mapEntity.getMagicroom());
+
+        // 生成返回值
+        int[][] resMap = new int[5][5];
+        for (int i=0; i<res.size(); i++){
+            int index = res.get(i);
+            if(i == res.size()-1){
+                // 魔法房间为list最后一个元素
+                resMap[index/5][index%5] = 2;
+            }
+            else {
+                resMap[index/5][index%5] = 1;
+            }
+        }
+
+        int[] finalMap = new int[25];
+        for (int i=0; i<5; i++){
+            System.arraycopy(resMap[i], 0, finalMap, 5 * i + 0, 5);
+        }
+
+        return finalMap;
+    }
+
 
 
     /**
@@ -466,20 +507,6 @@ public class MapServiceImpl implements MapService {
 
 
     /**
-     * 点击图鉴查询所有物品与NPC信息
-     * @return 所有信息
-     */
-    public List<ProductEntity> handbook(){
-        List<ProductEntity> book = new ArrayList<>();
-
-        // 查询所有物品
-        for(int i=1; i<=12; i++){
-            book.add(productMapper.findById(i));
-        }
-        return book;
-    }
-
-    /**
      * 使用物品
      * @param userid 用户id
      * @param choice 被选择物品序号
@@ -518,6 +545,35 @@ public class MapServiceImpl implements MapService {
         return products;
     }
 
+    /**
+     * 点击图鉴查询所有物品与NPC信息
+     * @return 所有信息
+     */
+    public List<ProductEntity> handbook(){
+        List<ProductEntity> book = new ArrayList<>();
+
+        // 查询所有物品
+        for(int i=1; i<=12; i++){
+            book.add(productMapper.findById(i));
+        }
+        return book;
+    }
+
+
+    /**
+     * 结束游戏
+     * @param userid 用户id
+     * @param endTime 结束时剩余时间
+     */
+    public void endGame(Integer userid, Integer endTime){
+        PlayerEntity player = playerReposity.findByUserid(userid);
+
+        endTime = Math.max(0, endTime);
+        player.setEndtime(endTime);
+
+        playerReposity.save(player);
+
+    }
 
 
 }
