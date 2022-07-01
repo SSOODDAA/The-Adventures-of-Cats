@@ -132,6 +132,8 @@ public class MapController extends BaseController{
     @PostMapping("/take")
     public JsonResult<List<ProductEntity>> take(Integer userid, String index, String products){
         // 强转
+        products = products.trim().replace("[", "");
+        products = products.trim().replace("]", "");
         String[] pstrs = products.split(",");
         List<Integer> listProducts = new ArrayList<>();
         for(String str: pstrs){
@@ -139,6 +141,8 @@ public class MapController extends BaseController{
             listProducts.add(i);
         }
 
+        index = index.trim().replace("[", "");
+        index = index.trim().replace("]", "");
         String[] istrs = index.split(",");
         List<Integer> listIndex = new ArrayList<>();
         for(String str: istrs){
