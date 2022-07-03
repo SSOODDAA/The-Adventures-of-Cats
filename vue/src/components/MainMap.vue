@@ -105,7 +105,7 @@ export default {
     const weightValue=ref(0);//载重值
     const scoreValue=ref(0);//得分；
     const roleid=ref(2);//角色id
-    const TIME_COUNT=ref(3);
+    const TIME_COUNT=ref(300);
     const count=ref();//游戏剩余时间
     const timer=ref();
     const isStop=ref(false);
